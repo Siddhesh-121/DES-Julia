@@ -1,7 +1,7 @@
 #!/usr/bin/env julia
 
-include("../src/DESLib.jl")
-using .DESLib
+include("../../src/DESLibrary.jl")
+using .DESLibrary
 using Printf
 using Statistics
 
