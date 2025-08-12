@@ -117,38 +117,6 @@ function validate_model(engine::DESEngine, model_id::Symbol;
 end
 
 # Model-specific validation
-function validate_model_specific(model::MM1Model, results::SimulationResults, tolerance::Float64)
-    # Validate MM1 parameters
-    param_validation = validate_mm1_parameters(model.λ, model.μ)
-    
-    if !param_validation.is_valid
-        return (
-            is_valid = false,
-            error = "Invalid MM1 parameters",
-            details = param_validation.checks
-        )
-    end
-    
-    # Little's Law validation
-    littles_law = validate_littles_law(results, model.λ)
-    
-    # Theoretical comparison
-    theoretical = theoretical_mm1(model.λ, model.μ)
-    errors = calculate_errors(results, theoretical)
-    
-    # Check if errors are within tolerance
-    within_tolerance = (
-        errors.utilization_error < tolerance &&
-        errors.service_time_error < tolerance/10  # Service time should be very accurate
-    )
-    
-    return (
-        is_valid = littles_law.is_valid && within_tolerance,
-        littles_law = littles_law,
-        theoretical_errors = errors,
-        within_tolerance = within_tolerance
-    )
-end
 
 # MM2Model-specific validation removed - now using MMCModel
 

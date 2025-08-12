@@ -2,7 +2,7 @@ mutable struct DESEngine
     event_queue::EventQueue
     rng::FastRNG
     
-    models::Dict{Symbol, QueueModel}
+    models::Dict{Symbol, SimulationModel}
     
     max_entities::Int
     entities_processed::Int
@@ -20,7 +20,7 @@ mutable struct DESEngine
         new(
             EventQueue(),
             FastRNG(seed),
-            Dict{Symbol, QueueModel}(),
+            Dict{Symbol, SimulationModel}(),
             max_entities,
             0,
             0,
@@ -33,7 +33,7 @@ mutable struct DESEngine
     end
 end
 
-function add_model!(engine::DESEngine, model_id::Symbol, model::QueueModel)
+function add_model!(engine::DESEngine, model_id::Symbol, model::SimulationModel)
     engine.models[model_id] = model
 end
 
@@ -47,7 +47,15 @@ end
         engine.statistics_start_time = get_current_time(engine)
         
         for (model_id, model) in engine.models
-            reset_statistics!(model, engine)
+            try
+                reset_statistics!(model, engine)
+            catch e
+                if isa(e, MethodError) && e.f === reset_statistics!
+                    @warn "reset_statistics! not defined for model type $(typeof(model)). Statistics may be inaccurate."
+                else
+                    rethrow(e)
+                end
+            end
         end
     end
 end
@@ -56,13 +64,25 @@ function all_entities_complete(engine::DESEngine)
     if engine.entities_processed < engine.max_entities
         return false
     end
-    
+
     for (model_id, model) in engine.models
-        if !isempty(model.queue) || has_entities_in_service(model)
-            return false
+        if hasfield(typeof(model), :queue)
+            if !isempty(getfield(model, :queue)) || has_entities_in_service(model)
+                return false
+            end
+        elseif hasfield(typeof(model), :packet_queues)
+            # For CSMACDModel: all per-node queues must be empty and no node transmitting
+            if any(!isempty(q) for q in getfield(model, :packet_queues)) || has_entities_in_service(model)
+                return false
+            end
+        else
+            # Fallback: just check if any entities are in service
+            if has_entities_in_service(model)
+                return false
+            end
         end
     end
-    
+
     return true
 end
 
@@ -95,7 +115,7 @@ function simulate!(engine::DESEngine; verbose::Bool=false)
             break
         end
         
-        if event.time > engine.simulation_end_time
+        if event.time >= engine.simulation_end_time
             break
         end
         
@@ -142,6 +162,11 @@ end
 
 @inline function increment_entities!(engine::DESEngine)
     engine.entities_processed += 1
+end
+
+# Alias for models to mark entity completion
+@inline function mark_entity_completed!(engine::DESEngine, _)
+    increment_entities!(engine)
 end
 
 @inline function increment_arrivals!(engine::DESEngine)

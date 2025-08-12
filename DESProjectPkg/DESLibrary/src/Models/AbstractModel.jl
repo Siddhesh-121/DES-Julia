@@ -1,25 +1,19 @@
-abstract type QueueModel end
+abstract type SimulationModel end
 
 struct SimulationResults
     avg_waiting_time::Float64
     avg_service_time::Float64
     avg_time_in_system::Float64
-    
     server_utilization::Float64
-    
     avg_queue_length::Float64
     max_queue_length::Int
-    
     waiting_time_std::Float64
     service_time_std::Float64
     max_waiting_time::Float64
     max_service_time::Float64
-    
     entities_processed::Int
     simulation_time::Float64
-    
     extra_metrics::Dict{Symbol, Float64}
-    
     function SimulationResults(
         avg_waiting_time::Float64,
         avg_service_time::Float64,
@@ -50,6 +44,5 @@ function finalize_model! end
 function get_statistics end
 function reset_model! end
 function reset_statistics! end
-
 function get_theoretical_results end
 function validate_model end 
