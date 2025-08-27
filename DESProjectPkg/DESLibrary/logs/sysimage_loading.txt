@@ -1,0 +1,6 @@
+D:\siddh\Documents\DES Julia\DESProjectPkg\DESLibrary>julia --sysimage DESLibrary_compiled.so test/test_sysimage.jl
+=== Sysimage Test ===
+  0.021380 seconds (1.05 k allocations: 55.172 KiB)
+  0.365726 seconds (125.45 k allocations: 5.878 MiB, 31.16% compilation time)   
+  0.000017 seconds (8 allocations: 384 bytes)
+Sysimage test complete

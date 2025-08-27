@@ -1,15 +1,8 @@
-julia> include("test/test_normal.jl")
+D:\siddh\Documents\DES Julia\DESProjectPkg\DESLibrary>julia test/test_normal.jl  
 === Normal Julia Test ===
-  0.001276 seconds (644 allocations: 36.094 KiB)
-WARNING: replacing module DESLibrary.
-  0.176564 seconds (121.71 k allocations: 5.696 MiB, 4.60% compilation time)
-  0.000018 seconds (8 allocations: 384 bytes)
+  1.416831 seconds (835.66 k allocations: 53.403 MiB, 3.12% gc time, 13.81% compilation time)
+  0.549542 seconds (664.87 k allocations: 32.208 MiB, 2.60% gc time, 70.08% compilation time)
+  0.000039 seconds (8 allocations: 384 bytes)
 Normal Julia test complete
 
-julia> include("test/test_normal.jl")
-=== Normal Julia Test ===
-  0.001597 seconds (644 allocations: 36.094 KiB)
-WARNING: replacing module DESLibrary.
-  0.180602 seconds (121.71 k allocations: 5.696 MiB, 4.58% compilation time)
-  0.000025 seconds (8 allocations: 384 bytes)
-Normal Julia test complete
+
