@@ -132,15 +132,15 @@ function simulate!(engine::DESEngine; verbose::Bool=false)
         events_processed += 1
         
         if verbose && events_processed % 1000 == 0
-            warmup_status = engine.warmup_completed ? "✅" : "⏳"
-            arrivals_status = engine.entities_arrived >= engine.max_entities ? "✅" : "⏳"
+            warmup_status = engine.warmup_completed ? "OK" : "..."
+            arrivals_status = engine.entities_arrived >= engine.max_entities ? "OK" : "..."
             print("Events: $events_processed, Arrived: $(engine.entities_arrived), Completed: $(engine.entities_processed), Warmup: $warmup_status, Arrivals: $arrivals_status\r")
             flush(stdout)
         end
         
         if all_entities_complete(engine)
             if verbose
-                println("\n✅ All $(engine.max_entities) entities completed!")
+                println("\nAll $(engine.max_entities) entities completed!")
             end
             break
         end
@@ -156,7 +156,7 @@ function simulate!(engine::DESEngine; verbose::Bool=false)
     end
 end
 
-@inline function schedule_event!(engine::DESEngine, event::Event)
+@inline function schedule_event!(engine::DESEngine, event::GenericEvent)
     schedule_event!(engine.event_queue, event)
 end
 

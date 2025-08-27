@@ -1,0 +1,70 @@
+
+CSMA/CD Simulation using DESLibrary (Enhanced)
+==================================================
+Nodes: 10, λ: 5.0, Max frames: 100000
+TX time: 0.01, Prop delay: 0.005, Slot time: 0.005
+
+Starting simulation...
+All nodes idle with empty queues - simulation complete
+
+SIMULATION RESULTS
+==================================================
+Wall-clock time: 531.0 ms
+Simulation time: 1997.74 time units
+Successful transmissions: 99986
+Total collisions: 87688
+Total generated frames: 100000
+Total dropped frames: 14
+Frames still queued: 0
+Frame loss rate: 0.014%
+
+PERFORMANCE METRICS
+==================================================
+Throughput: 50.0496 frames/time unit
+Collision rate: 43.8936 collisions/time unit
+Drop rate: 0.007 drops/time unit
+Average delay: 0.569977 time units
+Fairness index: 0.9999 (1.0 = perfect fairness)
+
+QUEUE DISTRIBUTION
+==================================================
+
+PER-NODE MAXIMUM QUEUE LENGTHS
+----------------------------------------
+Node 1: 22 frames
+Node 2: 21 frames
+Node 3: 19 frames
+Node 4: 20 frames
+Node 5: 28 frames
+Node 6: 21 frames
+Node 7: 20 frames
+Node 8: 21 frames
+Node 9: 20 frames
+Node 10: 20 frames
+
+PER-NODE STATISTICS
+================================================================================
+Node | Generated | Successes | Drops | Max Queue | Success Rate
+--------------------------------------------------------------------------------
+   1 |     10083 |     10080 |     3 |        22 |       99.97%
+   2 |     10032 |     10032 |     0 |        21 |       100.0%
+   3 |     10044 |     10043 |     1 |        19 |       99.99%
+   4 |      9901 |      9900 |     1 |        20 |       99.99%
+   5 |      9880 |      9879 |     1 |        28 |       99.99%
+   6 |     10036 |     10035 |     1 |        21 |       99.99%
+   7 |     10117 |     10115 |     2 |        20 |       99.98%
+   8 |      9856 |      9854 |     2 |        21 |       99.98%
+   9 |     10024 |     10024 |     0 |        20 |       100.0%
+  10 |     10027 |     10024 |     3 |        20 |       99.97%
+
+FRAME ACCOUNTING SUMMARY
+----------------------------------------
+Total frames generated: 100000
+Total frames succeeded: 99986
+Total frames dropped:   14
+Total frames queued:    0
+Frames processed:       100000
+Overall success rate:   99.986%
+
+DES Julia CSMA/CD Enhanced simulation completed!
+  0.775596 seconds (16.06 M allocations: 294.736 MiB, 3.81% gc time, 29.98% compilation time)

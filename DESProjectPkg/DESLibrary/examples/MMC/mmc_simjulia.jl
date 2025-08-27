@@ -5,6 +5,7 @@ using ResumableFunctions
 using Distributions
 using Statistics
 using Printf
+using Random
 
 const λ = 20.0
 const μ = 2.0
@@ -201,9 +202,9 @@ function calculate_theoretical_values(λ::Float64, μ::Float64, c::Int)
 end
 
 function main()
-    println("🏗️  M/M/C Queue Simulation using SimJulia")
+    println("M/M/C Queue Simulation using SimJulia")
     println("=" ^ 50)
-    println("📋 Configuration:")
+    println("Configuration:")
     println("  Arrival rate (λ): $λ entities/time")
     println("  Service rate (μ): $μ entities/time per server")
     println("  Number of servers (c): $c")
@@ -211,19 +212,19 @@ function main()
     println("  Warmup period: $(round(warmup_fraction*100, digits=1))%")
     println("  Traffic intensity (ρ): $(round(ρ, digits=3))")
     println("  Traffic intensity per server (ρ/c): $(round(ρ_per_server, digits=3))")
-    println("  System status: $(ρ_per_server < 1.0 ? "✅ Stable" : "❌ Unstable")")
+    println("  System status: $(ρ_per_server < 1.0 ? "Stable" : "Unstable")")
     
     if ρ_per_server >= 1.0
-        println("⚠️  Warning: System is unstable (ρ/c ≥ 1.0). Results may be unreliable.")
+        println("Warning: System is unstable (ρ/c ≥ 1.0). Results may be unreliable.")
     end
     
-    println("\n🚀 Starting simulation...")
+    println("\nStarting simulation...")
     
     Random.seed!(seed)
     
     env = Simulation()
     
-    server = Resource(env, capacity=c)
+    server = Resource(env, c)
     
     warmup_entities = max(1, Int(round(max_entities * warmup_fraction)))
     stats = MMCStatistics(warmup_entities)
@@ -239,13 +240,20 @@ function main()
     record_queue_length!(stats, env, length(server.put_queue))
     
     simulation_time = now(env)
-    stats_collection_time = stats.warmup_completed ? simulation_time - stats.warmup_completion_time : simulation_time
+    if !isfinite(simulation_time)
+        simulation_time = !isempty(stats.departure_times) ? stats.departure_times[end] : (stats.last_queue_time > 0 ? stats.last_queue_time : 0.0)
+    end
+    if stats.warmup_completed
+        stats_collection_time = simulation_time > stats.warmup_completion_time ? simulation_time - stats.warmup_completion_time : 0.0
+    else
+        stats_collection_time = simulation_time
+    end
     
-    total_throughput = stats.total_entities / wall_clock_time
-    stats_throughput = stats.statistics_entities / wall_clock_time
-    events_per_sec = stats.total_entities * 2 / wall_clock_time
+    total_throughput = wall_clock_time > 0 ? stats.total_entities / wall_clock_time : 0.0
+    stats_throughput = wall_clock_time > 0 ? stats.statistics_entities / wall_clock_time : 0.0
+    events_per_sec = wall_clock_time > 0 ? stats.total_entities * 2 / wall_clock_time : 0.0
     
-    println("\n⏱️  PERFORMANCE RESULTS")
+    println("\nPERFORMANCE RESULTS")
     println("=" ^ 50)
     println("  Wall-clock time: $(round(wall_clock_time * 1000, digits=2)) ms")
     println("  Simulation time: $(round(simulation_time, digits=2)) time units")
@@ -271,7 +279,7 @@ function main()
     total_server_busy_time = sum(stats.server_busy_times_stats)
     server_utilization = stats_collection_time > 0 ? total_server_busy_time / (c * stats_collection_time) : 0.0
     
-    println("\n📊 SIMULATION STATISTICS")
+    println("\nSIMULATION STATISTICS")
     println("=" ^ 50)
     println("  Average waiting time: $(round(avg_waiting_time, digits=4)) time units")
     println("  Average service time: $(round(avg_service_time, digits=4)) time units")
@@ -280,7 +288,7 @@ function main()
     println("  Maximum queue length: $(stats.max_queue_length) entities")
     println("  Server utilization: $(round(server_utilization, digits=4)) ($(round(server_utilization*100, digits=2))%)")
     
-    println("\n🖥️  INDIVIDUAL SERVER UTILIZATIONS")
+    println("\nINDIVIDUAL SERVER UTILIZATIONS")
     println("=" ^ 50)
     server_utils = Float64[]
     for i in 1:c
@@ -295,13 +303,13 @@ function main()
         server_std = std(server_utils)
         server_cv = server_mean > 0 ? server_std / server_mean : 0.0
         println("  Server balance (CV): $(round(server_cv, digits=6)) (lower is better)")
-        balance_status = server_cv < 0.01 ? "✅ Excellent" : server_cv < 0.05 ? "✅ Good" : "⚠️ Fair"
+        balance_status = server_cv < 0.01 ? "Excellent" : server_cv < 0.05 ? "Good" : "Fair"
         println("  Balance status: $balance_status")
     end
     
     theoretical = calculate_theoretical_values(λ, μ, c)
     
-    println("\n🎯 THEORETICAL CALCULATIONS")
+    println("\nTHEORETICAL CALCULATIONS")
     println("=" ^ 50)
     
     if ρ_per_server >= 1.0
@@ -315,7 +323,7 @@ function main()
         println("  Erlang-C (P(wait)): $(round(theoretical.erlang_c, digits=6))")
     end
     
-    println("\n🔍 ACCURACY VALIDATION")
+    println("\nACCURACY VALIDATION")
     println("=" ^ 50)
     
     max_rel_error = 0.0
@@ -344,19 +352,19 @@ function main()
         
         println("\n  Maximum relative error: $(round(max_rel_error, digits=2))%")
         if max_rel_error < 1.0
-            println("  Accuracy status: ✅ Excellent (< 1% error)")
+            println("  Accuracy status:  Excellent (< 1% error)")
         elseif max_rel_error < 5.0
-            println("  Accuracy status: ✅ Good (< 5% error)")
+            println("  Accuracy status:  Good (< 5% error)")
         elseif max_rel_error < 10.0
-            println("  Accuracy status: ⚠️ Fair (< 10% error)")
+            println("  Accuracy status:  Fair (< 10% error)")
         else
-            println("  Accuracy status: ❌ Poor (≥ 10% error)")
+            println("  Accuracy status:  Poor (≥ 10% error)")
         end
     else
         println("  System is unstable - accuracy validation not applicable")
     end
     
-    println("\n⚖️  LITTLE'S LAW VALIDATION")
+    println("\nLITTLE'S LAW VALIDATION")
     println("=" ^ 50)
     
     effective_arrival_rate = stats_collection_time > 0 ? stats.statistics_entities / stats_collection_time : 0.0
@@ -375,27 +383,29 @@ function main()
     println("  Relative error: $(round(littles_law_rel_error, digits=4))%")
     
     if littles_law_rel_error < 1.0
-        println("  Little's Law: ✅ Validated (< 1% error)")
+        println("  Little's Law:  Validated (< 1% error)")
     elseif littles_law_rel_error < 5.0
-        println("  Little's Law: ✅ Acceptable (< 5% error)")
+        println("  Little's Law:  Acceptable (< 5% error)")
     else
-        println("  Little's Law: ⚠️ Questionable (≥ 5% error)")
+        println("  Little's Law:  Questionable (≥ 5% error)")
     end
     
-    println("\n🏆 SYSTEM PERFORMANCE SUMMARY")
+    println("\nSYSTEM PERFORMANCE SUMMARY")
     println("=" ^ 50)
     println("  Implementation: SimJulia M/M/C")
     println("  Configuration: λ=$λ, μ=$μ, c=$c")
     println("  Entities processed: $(stats.total_entities)")
     println("  Runtime: $(round(wall_clock_time * 1000, digits=2)) ms")
     println("  Throughput: $(round(total_throughput, digits=0)) entities/sec")
-    println("  Memory efficiency: ➖ No special optimization")
+    println("  Memory efficiency: No special optimization")
     println("  Server balance: $(length(server_utils) > 1 ? "$(round(server_cv, digits=6)) CV" : "N/A")")
     accuracy_text = ρ_per_server < 1.0 ? "$(round(max_rel_error, digits=2))% max error" : "N/A (unstable)"
     println("  Theoretical accuracy: $accuracy_text")
     println("  Little's Law: $(round(littles_law_rel_error, digits=4))% error")
     
-    println("\n✅ SimJulia M/M/C simulation completed successfully!")
+    println("\nSimJulia M/M/C simulation completed successfully!")
 end
 
-main() 
+if abspath(PROGRAM_FILE) == @__FILE__
+    main()
+end

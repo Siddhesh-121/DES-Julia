@@ -21,7 +21,7 @@ const MAX_BACKOFF_EXPONENT = 8                      # Cap backoff growth at 2^8
 const FAIRNESS_THRESHOLD = 5                        # Queue length threshold for priority
 const STARVATION_THRESHOLD = 10                     # Emergency intervention threshold
 
-println("\n🏗️  CSMA/CD Simulation using DESLibrary")
+println("\nCSMA/CD Simulation using DESLibrary")
 println("=" ^ 50)
 println("Nodes: $NUM_NODES, λ: $LAMBDA, Target: $MAX_SUCCESSES frames")
 println("TX time: $TX_TIME, Prop delay: $PROP_DELAY, Slot time: $SLOT_TIME")
@@ -57,19 +57,19 @@ mutable struct EnhancedCSMACDModel <: DESLibrary.SimulationModel
     
     packet_queues::Vector{Vector{Float64}}
     
-    ongoing_transmissions::Dict{Int, Float64}  # node_id -> start_time
+    ongoing_transmissions::Dict{Int, Float64}
     
     retry_counters::Vector{Int}
     
-    node_success_counts::Vector{Int}            # Successful transmissions per node
-    node_drop_counts::Vector{Int}               # Dropped frames per node
-    node_generated_counts::Vector{Int}          # Total frames generated per node
-    last_fairness_check::Float64                # Time of last fairness adjustment
+    node_success_counts::Vector{Int}
+    node_drop_counts::Vector{Int}
+    node_generated_counts::Vector{Int}
+    last_fairness_check::Float64
     
     successful_transmissions::Int
     total_collisions::Int
     transmission_delays::Vector{Float64}
-    max_queue_lengths::Vector{Int}              # Track max queue length per node
+    max_queue_lengths::Vector{Int}
     
     function EnhancedCSMACDModel(num_nodes::Int, model_id::Symbol = :csmacd)
         new(
@@ -136,7 +136,7 @@ function initialize_model!(model::EnhancedCSMACDModel, engine::DESEngine)
         event = create_generic_event(interarrival, node, model.model_id, :frame_generated)
         DESLibrary.schedule_event!(engine, event)
     end
-    println("✅ Initialized $(model.num_nodes) nodes with frame generation")
+    println("Initialized $(model.num_nodes) nodes with frame generation")
 end
 
 
@@ -173,7 +173,7 @@ function handle_collision!(model::EnhancedCSMACDModel, engine::DESEngine, collid
             if !isempty(model.packet_queues[node])
                 popfirst!(model.packet_queues[node])  # Drop frame
                 model.node_drop_counts[node] += 1
-                println("📉 Node $node drops frame after $adaptive_retry_limit retries (queue: $queue_len)")
+                println("Node $node drops frame after $adaptive_retry_limit retries (queue: $queue_len)")
             end
             model.retry_counters[node] = 0
             model.node_states[node] = :idle
@@ -256,7 +256,7 @@ function complete_transmission!(model::EnhancedCSMACDModel, engine::DESEngine, n
         mark_entity_completed!(engine, node)
         
         if model.successful_transmissions >= MAX_SUCCESSES
-            println("🎯 Target reached! $(model.successful_transmissions) successful transmissions")
+            println(" Target reached! $(model.successful_transmissions) successful transmissions")
             DESLibrary.stop_simulation!(engine)
             return
         end
@@ -364,7 +364,7 @@ function get_statistics(model::EnhancedCSMACDModel, engine::DESEngine)
     )
 end
 
-println("\n🚀 Starting simulation...")
+println("\nStarting simulation...")
 
 engine = DESEngine(MAX_ENTITIES, SEED, WARMUP_FRACTION)
 model = EnhancedCSMACDModel(NUM_NODES)
@@ -386,7 +386,7 @@ while !engine.stop_simulation
         total_queued = sum(length.(model.packet_queues))
         
         if all_idle && total_queued == 0
-            println("✅ All nodes idle with empty queues - simulation complete")
+            println("All nodes idle with empty queues - simulation complete")
             break
         elseif all_idle && total_queued > 0
             for node in 1:model.num_nodes
@@ -396,7 +396,7 @@ while !engine.stop_simulation
                 end
             end
         else
-            println("⚠️  No events but nodes not all idle - terminating")
+            println("No events but nodes not all idle - terminating")
             break
         end
         continue
@@ -413,11 +413,11 @@ while !engine.stop_simulation
         
         if total_queued > 0
             queue_status = [length(q) for q in model.packet_queues]
-            println("📊 Time $(round(current_time, digits=1)): Completed $(model.successful_transmissions), Queued $total_queued, Queues: $queue_status")
+            println("Time $(round(current_time, digits=1)): Completed $(model.successful_transmissions), Queued $total_queued, Queues: $queue_status")
         end
         
         if current_time > 5000.0
-            println("⏰ Safety timeout reached")
+            println("Safety timeout reached")
             break
         end
     end
@@ -426,7 +426,7 @@ end
 end_time = time()
 stats = get_statistics(model, engine)
 
-println("\n⏱️  SIMULATION RESULTS")
+println("\nSIMULATION RESULTS")
 println("=" ^ 50)
 println("Wall-clock time: $(round((end_time - start_time) * 1000, digits=2)) ms")
 println("Simulation time: $(round(stats[:simulation_time], digits=2)) time units")
@@ -437,7 +437,7 @@ println("Total dropped frames: $(stats[:total_drops])")
 println("Frames still queued: $(stats[:frames_queued])")
 println("Frame loss rate: $(round(stats[:total_drops] / stats[:total_generated] * 100, digits=3))%")
 
-println("\n📊 PERFORMANCE METRICS")
+println("\nPERFORMANCE METRICS")
 println("=" ^ 50)
 println("Throughput: $(round(stats[:throughput], digits=4)) frames/time unit")
 println("Collision rate: $(round(stats[:collision_rate], digits=4)) collisions/time unit")
@@ -445,17 +445,17 @@ println("Drop rate: $(round(stats[:drop_rate], digits=4)) drops/time unit")
 println("Average delay: $(round(stats[:average_delay], digits=6)) time units")
 println("Fairness index: $(round(stats[:fairness_index], digits=4)) (1.0 = perfect fairness)")
 
-println("\n📈 QUEUE DISTRIBUTION")
+println("\nQUEUE DISTRIBUTION")
 println("=" ^ 50)
 
-println("\n📦 PER-NODE MAXIMUM QUEUE LENGTHS")
+println("\nPER-NODE MAXIMUM QUEUE LENGTHS")
 println("-" ^ 40)
 for i in 1:model.num_nodes
     max_q = model.max_queue_lengths[i]
     println("Node $i: $max_q frames")
 end
 
-println("\n🎯 PER-NODE STATISTICS")
+println("\nPER-NODE STATISTICS")
 println("=" ^ 80)
 println("Node | Generated | Successes | Drops | Max Queue | Success Rate")
 println("-" ^ 80)
@@ -474,7 +474,7 @@ total_successes = sum(stats[:node_success_counts])
 total_drops = sum(stats[:node_drop_counts])
 total_queued = sum(length(queue) for queue in model.packet_queues)
 
-println("\n📊 FRAME ACCOUNTING SUMMARY")
+println("\nFRAME ACCOUNTING SUMMARY")
 println("-" ^ 40)
 println("Total frames generated: $total_generated")
 println("Total frames succeeded: $total_successes")
@@ -484,7 +484,7 @@ println("Frames processed:       $(total_successes + total_drops)")
 println("Overall success rate:   $(round((total_successes/total_generated)*100, digits=3))%")
 
 if stats[:frames_queued] > 0
-    println("\n📦 REMAINING FRAMES BY NODE")
+    println("\nREMAINING FRAMES BY NODE")
     for (i, queue) in enumerate(model.packet_queues)
         if !isempty(queue)
             println("Node $i: $(length(queue)) frames")
@@ -492,4 +492,4 @@ if stats[:frames_queued] > 0
     end
 end
 
-println("\n✅ DES Julia CSMA/CD simulation completed!")
+println("\nDES Julia CSMA/CD simulation completed!")

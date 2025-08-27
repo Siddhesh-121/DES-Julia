@@ -21,15 +21,8 @@ const MAX_BACKOFF_EXPONENT = 8                      # Cap backoff growth at 2^8
 const FAIRNESS_THRESHOLD = 5                        # Queue length threshold for priority
 const STARVATION_THRESHOLD = 10                     # Emergency intervention threshold
 
-println("\n🚀 CSMA/CD Simulation using SimJulia")
-println("=" ^ 50)
-println("Nodes: $NUM_NODES, λ: $LAMBDA, Target: $MAX_SUCCESSES frames")
-println("TX time: $TX_TIME, Prop delay: $PROP_DELAY, Slot time: $SLOT_TIME")
-println("Adaptive retry limits: $MAX_RETRY_SCALE, Fairness threshold: $FAIRNESS_THRESHOLD")
-
-Random.seed!(SEED)
-const PRECOMPUTED_EXPONENTIALS = [randexp() / LAMBDA for _ in 1:10000]
-const PRECOMPUTED_BACKOFFS = [rand(0:255) for _ in 1:10000]
+const PRECOMPUTED_EXPONENTIALS = Ref{Vector{Float64}}(Vector{Float64}())
+const PRECOMPUTED_BACKOFFS = Ref{Vector{Int}}(Vector{Int}())
 
 const exp_counter = Ref(0)
 const backoff_counter = Ref(0)
@@ -39,13 +32,15 @@ const final_sim_time = Ref(0.0)
 
 function deterministic_exponential()
     exp_counter[] += 1
-    return PRECOMPUTED_EXPONENTIALS[(exp_counter[] - 1) % length(PRECOMPUTED_EXPONENTIALS) + 1]
+    local arr = PRECOMPUTED_EXPONENTIALS[]
+    return arr[(exp_counter[] - 1) % length(arr) + 1]
 end
 
 
 function deterministic_backoff_int(max_val::Int)
     backoff_counter[] += 1
-    return PRECOMPUTED_BACKOFFS[(backoff_counter[] - 1) % length(PRECOMPUTED_BACKOFFS) + 1] % max_val
+    local arr = PRECOMPUTED_BACKOFFS[]
+    return arr[(backoff_counter[] - 1) % length(arr) + 1] % max_val
 end
 
 
@@ -290,21 +285,19 @@ end
         
         if current_time - last_report_time >= 2.0
             if frames_queued > 0
-                queue_status = [length(q) for q in model.packet_queues]
-                @printf("📊 Time %.1f: Completed %d, Queued %d, Queues: %s\n", 
-                       current_time, model.successful_transmissions, frames_queued, queue_status)
+                # progress monitor suppressed
             end
             last_report_time = current_time
         end
         
         if total_generated[] >= MAX_SUCCESSES && frames_queued == 0
-            println("✅ All nodes idle with empty queues - simulation complete")
+            println(" All nodes idle with empty queues - simulation complete")
             final_sim_time[] = current_time
             break
         end
         
         if current_time > 5000.0
-            @printf("\n⏰ Safety break at time %.2f - simulation may be stuck\n", current_time)
+            @printf("\n Safety break at time %.2f - simulation may be stuck\n", current_time)
             final_sim_time[] = current_time
             break
         end
@@ -313,11 +306,19 @@ end
 
 
 function run_simjulia_simulation()
-    println("\n🎯 SIMJULIA-STYLE EVENT STRUCTURE:")
-    println("   - Pure process-based approach using SimJulia")
-    println("   - Exact collision detection: abs(now - start_time) < 2*PROP_DELAY")
-    println("   - Single collision counting per collision event")
-    println("   - Deterministic randomness matching other implementations exactly")
+    println("\nCSMA/CD Simulation using SimJulia")
+    println("=" ^ 50)
+    println("Nodes: $NUM_NODES, λ: $LAMBDA, Target: $MAX_SUCCESSES frames")
+    println("TX time: $TX_TIME, Prop delay: $PROP_DELAY, Slot time: $SLOT_TIME")
+    println("Adaptive retry limits: $MAX_RETRY_SCALE, Fairness threshold: $FAIRNESS_THRESHOLD")
+
+    Random.seed!(SEED)
+    PRECOMPUTED_EXPONENTIALS[] = [randexp() / LAMBDA for _ in 1:10000]
+    PRECOMPUTED_BACKOFFS[] = [rand(0:255) for _ in 1:10000]
+    exp_counter[] = 0
+    backoff_counter[] = 0
+    total_generated[] = 0
+    final_sim_time[] = 0.0
 
     sim = Simulation()
     
@@ -338,7 +339,7 @@ function run_simjulia_simulation()
     
     if !isfinite(sim_time)
         sim_time = final_sim_time[]
-        println("⚠️  WARNING: SimJulia returned Inf time, using last tracked time: $sim_time")
+        println("WARNING: SimJulia returned Inf time, using last tracked time: $sim_time")
     end
 
     throughput = model.successful_transmissions / sim_time
@@ -361,7 +362,7 @@ function run_simjulia_simulation()
     min_queue = !isempty(queue_lengths) ? minimum(queue_lengths) : 0
     avg_queue = !isempty(queue_lengths) ? mean(queue_lengths) : 0.0
 
-    println("\n⏱️  SIMJULIA SIMULATION RESULTS")
+    println("\n  SIMJULIA SIMULATION RESULTS")
     println("=" ^ 50)
     @printf("Wall-clock time: %.2f ms\n", wall_clock)
     @printf("Simulation time: %.2f time units\n", sim_time)
@@ -372,7 +373,7 @@ function run_simjulia_simulation()
     @printf("Frames still queued: %d\n", sum(queue_lengths))
     @printf("Frame loss rate: %.3f%%\n", total_drops / total_generated[] * 100)
 
-    println("\n📊 PERFORMANCE METRICS")
+    println("\nPERFORMANCE METRICS")
     println("=" ^ 50)
     @printf("Throughput: %.4f frames/time unit\n", throughput)
     @printf("Collision rate: %.4f collisions/time unit\n", collision_rate)
@@ -383,26 +384,26 @@ function run_simjulia_simulation()
     if !isempty(model.dropped_frame_delays)
         avg_dropped_delay = mean(model.dropped_frame_delays)
         max_dropped_delay = maximum(model.dropped_frame_delays)
-        println("\n🔍 DELAY ANALYSIS (Bias Investigation)")
+        println("\nDELAY ANALYSIS (Bias Investigation)")
         println("=" ^ 50)
         @printf("Successful frame avg delay: %.6f time units\n", avg_delay)
         @printf("Dropped frame avg delay: %.6f time units\n", avg_dropped_delay)
         @printf("Max dropped frame delay: %.6f time units\n", max_dropped_delay)
         @printf("Dropped frames: %d\n", length(model.dropped_frame_delays))
         if avg_delay > 0
-            @printf("⚠️  Delay bias factor: %.2fx\n", avg_dropped_delay / avg_delay)
-            println("💡 This explains why avg delay seems low - high-delay frames are dropped!")
+            @printf("Delay bias factor: %.2fx\n", avg_dropped_delay / avg_delay)
+            println("This explains why avg delay seems low - high-delay frames are dropped!")
         end
     end
 
-    println("\n📈 QUEUE DISTRIBUTION")
-    println("=" ^ 50)
-    @printf("Max queue length: %d\n", max_queue)
-    @printf("Min queue length: %d\n", min_queue)
-    @printf("Average queue length: %.2f\n", avg_queue)
-    @printf("Queue imbalance: %d\n", max_queue - min_queue)
+    # println("\nQUEUE DISTRIBUTION")
+    # println("=" ^ 50)
+    # @printf("Max queue length: %d\n", max_queue)
+    # @printf("Min queue length: %d\n", min_queue)
+    # @printf("Average queue length: %.2f\n", avg_queue)
+    # @printf("Queue imbalance: %d\n", max_queue - min_queue)
 
-    println("\n🎯 PER-NODE STATISTICS")
+    println("\nPER-NODE STATISTICS")
     println("=" ^ 50)
     println("Node | Successes | Drops | Queued | Success Rate")
     println("-" ^ 50)
@@ -414,38 +415,19 @@ function run_simjulia_simulation()
         total_attempts = successes + drops
         success_rate = total_attempts > 0 ? successes / total_attempts * 100 : 0.0
         
-        @printf("%4d | %9d | %5d | %6d | %11.1f%%\n", i, successes, drops, queued, success_rate)
+        @printf("%4d | %9d | %5d | %6d | %11.3f%%\n", i, successes, drops, queued, success_rate)
     end
 
-    println("\n✅ SimJulia CSMA/CD simulation completed!")
+    println("\nSimJulia CSMA/CD simulation completed!")
     
     expected_collision_rate_15_nodes = 68.0  # Based on previous 15-node results
     match_quality = collision_rate / expected_collision_rate_15_nodes
     
-    println("\n🔧 COMPARISON WITH OTHER IMPLEMENTATIONS:")
-    @printf("Current collision rate: %.4f collisions/time\n", collision_rate)
-    @printf("Expected range for 15 nodes: ~65-70 collisions/time unit\n")
-    @printf("Match quality: %.2fx (target: ~1.0x)\n", match_quality)
     
-    println("\n🔧 SIMJULIA IMPLEMENTATION FEATURES:")
-    println("✅ Process-based discrete event simulation using SimJulia.jl")
-    println("✅ Exact collision detection matching DES Julia and SimPy")
-    println("✅ Dropped frame delay tracking for bias analysis")
-    println("✅ Deterministic randomness for reproducible results")
-    @printf("✅ Adaptive retry limits (MAX_RETRY_SCALE = %d)\n", MAX_RETRY_SCALE)
+    # println("\nRandom sequence usage:")
+    # @printf("Exponentials used: %d/%d\n", exp_counter[], length(PRECOMPUTED_EXPONENTIALS[]))
+    # @printf("Backoffs used: %d/%d\n", backoff_counter[], length(PRECOMPUTED_BACKOFFS[]))
     
-    println("\n📊 Random sequence usage:")
-    @printf("Exponentials used: %d/%d\n", exp_counter[], length(PRECOMPUTED_EXPONENTIALS))
-    @printf("Backoffs used: %d/%d\n", backoff_counter[], length(PRECOMPUTED_BACKOFFS))
-    
-    println("\n📈 KEY IMPLEMENTATION COMPARISON:")
-    @printf("🔍 SimJulia drops %d frames (%.1f%%)\n", total_drops, total_drops/total_generated[]*100)
-    if !isempty(model.dropped_frame_delays)
-        avg_dropped_delay = mean(model.dropped_frame_delays)
-        @printf("🔍 Dropped frames had avg delay: %.2f time units\n", avg_dropped_delay) 
-        @printf("🔍 Successful frames had avg delay: %.2f time units\n", avg_delay)
-        @printf("💡 SimJulia shows realistic delay distribution!\n")
-    end
     
     return model, sim_time, wall_clock
 end

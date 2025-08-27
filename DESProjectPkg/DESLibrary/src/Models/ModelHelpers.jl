@@ -2,7 +2,7 @@ function initialize_model!(model::QueueModel, engine::DESEngine)
     error("initialize_model! must be implemented for $(typeof(model))")
 end
 
-function process_event!(model::QueueModel, event::Event, engine::DESEngine)
+function process_event!(model::QueueModel, event::GenericEvent, engine::DESEngine)
     error("process_event! must be implemented for $(typeof(model))")
 end
 

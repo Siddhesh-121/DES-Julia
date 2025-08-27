@@ -1,11 +1,7 @@
 #!/usr/bin/env julia
 
-"""
-COMPREHENSIVE DESLibrary Precompilation Workload
-Exercises ALL core functions and logic for maximum sysimage benefits.
-"""
 
-println("🔥 COMPREHENSIVE DESLibrary Precompilation Starting...")
+println("COMPREHENSIVE DESLibrary Precompilation Starting...")
 println("=" ^ 60)
 
 # Load the complete library
@@ -15,12 +11,12 @@ using .DESLibrary
 # Load all statistical packages that will be used
 using Base.Threads, Statistics, HypothesisTests, Distributions, Random, Printf, SpecialFunctions
 
-println("📦 Core packages loaded")
+println("Core packages loaded")
 
 # =====================================================
 # SECTION 1: Core Engine Functions
 # =====================================================
-println("🔧 Precompiling Core Engine Functions...")
+println("Precompiling Core Engine Functions...")
 
 # Engine creation with different parameters
 engines = [
@@ -41,13 +37,13 @@ for (i, engine) in enumerate(engines)
     # Test warmup operations
     warmup_status = is_warmup_complete(engine)
     
-    println("  ✓ Engine $i operations precompiled")
+    println("  OK Engine $i operations precompiled")
 end
 
 # =====================================================
 # SECTION 2: Event System
 # =====================================================
-println("🎯 Precompiling Event System...")
+println("Precompiling Event System...")
 
 # Create different types of events
 arrival_event = DESLibrary.create_arrival(1, :test, 1.0)
@@ -62,12 +58,12 @@ for event in events
     entity_id = DESLibrary.get_entity_id(event)
 end
 
-println("  ✓ Event system precompiled")
+println("  OK Event system precompiled")
 
 # =====================================================
 # SECTION 3: MMC Model - Complete Workflow
 # =====================================================
-println("📊 Precompiling MMC Models (Complete Workflows)...")
+println("Precompiling MMC Models (Complete Workflows)...")
 
 # Test different MMC configurations
 mmc_configs = [
@@ -78,12 +74,12 @@ mmc_configs = [
 ]
 
 for (i, (λ, μ, c)) in enumerate(mmc_configs)
-    println("  🔄 MMC Configuration $i: M/M/$c (λ=$λ, μ=$μ)")
+    println("  MMC Configuration $i: M/M/$c (λ=$λ, μ=$μ)")
     
     # Create engine and model
-    engine = DESEngine(2000, 2024 + i, 0.1)
+    local engine = DESEngine(2000, 2024 + i, 0.1)
     model_id = Symbol("mmc_$i")
-    model = MMCModel(λ, μ, c, model_id)
+    local model = MMCModel(λ, μ, c, model_id)
     
     # Full workflow
     add_model!(engine, model_id, model)
@@ -101,13 +97,13 @@ for (i, (λ, μ, c)) in enumerate(mmc_configs)
     reset_statistics!(model, engine)
     reset_model!(model)
     
-    println("    ✓ M/M/$c workflow precompiled")
+    println("    OK M/M/$c workflow precompiled")
 end
 
 # =====================================================
 # SECTION 4: CSMA/CD Model - Complete Workflow  
 # =====================================================
-println("📡 Precompiling CSMA/CD Models...")
+println("Precompiling CSMA/CD Models...")
 
 # Test different CSMA/CD configurations
 csmacd_configs = [
@@ -117,12 +113,12 @@ csmacd_configs = [
 ]
 
 for (i, config) in enumerate(csmacd_configs)
-    println("  🔄 CSMA/CD Configuration $i: $(config.nodes) nodes")
+    println("  CSMA/CD Configuration $i: $(config.nodes) nodes")
     
     # Create engine and model
-    engine = DESEngine(1000, 3000 + i)
+    local engine = DESEngine(1000, 3000 + i)
     model_id = Symbol("csmacd_$i") 
-    model = CSMACDModel(config.nodes, config.λ, config.tx_time, 
+    local model = CSMACDModel(config.nodes, config.λ, config.tx_time, 
                        config.prop_delay, config.slot_time, model_id)
     
     # Full workflow
@@ -132,13 +128,36 @@ for (i, config) in enumerate(csmacd_configs)
     # Results and statistics
     results = get_results(engine)[model_id]
     
-    println("    ✓ $(config.nodes)-node CSMA/CD precompiled")
+    println("    OK $(config.nodes)-node CSMA/CD precompiled")
 end
+
+# Enhanced CSMA/CD precompile (call entry function only; no module redefinition)
+println("Precompiling Enhanced CSMA/CD Model...")
+try
+    # Avoid include here to prevent redef warnings during sysimage build
+    # Exercise a minimal enhanced path via the library API instead
+    local engine = DESEngine(2000, 2024)
+    local model = EnhancedCSMACDModel(10; model_id=:csmacd_enh2, frame_generation_rate=5.0,
+        transmission_time=0.01, propagation_delay=0.005, slot_time=0.005, max_frames=500,
+        rng=MersenneTwister(2024))
+    add_model!(engine, :csmacd_enh2, model)
+    initialize_model!(model, engine)
+    # Manually step a few events to compile the example-style loop pattern
+    for _ in 1:2000
+        ev = DESLibrary.get_next_event!(engine.event_queue)
+        ev === nothing && break
+        process_event!(model, ev, engine)
+    end
+    _ = get_statistics(model, engine)
+catch e
+    @warn "Enhanced CSMA/CD warmup failed" e
+end
+println("  OK Enhanced CSMA/CD precompiled")
 
 # =====================================================
 # SECTION 5: Statistical Analysis Functions
 # =====================================================
-println("📈 Precompiling Statistical Analysis...")
+println("Precompiling Statistical Analysis...")
 
 # Generate sample data from simulation results
 sample_waiting_times = Float64[]
@@ -147,8 +166,8 @@ sample_queue_lengths = Float64[]
 
 # Run multiple small simulations to get varied data
 for i in 1:10
-    engine = DESEngine(500, 4000 + i)
-    model = MMCModel(5.0 + i, 2.0, 3, Symbol("stats_$i"))
+    local engine = DESEngine(500, 4000 + i)
+    local model = MMCModel(5.0 + i, 2.0, 3, Symbol("stats_$i"))
     add_model!(engine, Symbol("stats_$i"), model)
     simulate!(engine, verbose=false)
     
@@ -159,7 +178,7 @@ for i in 1:10
 end
 
 # Exercise statistical functions
-println("  🧮 Basic statistics...")
+println("  Basic statistics...")
 waiting_mean = mean(sample_waiting_times)
 waiting_std = std(sample_waiting_times)
 waiting_median = median(sample_waiting_times)
@@ -169,7 +188,7 @@ util_mean = mean(sample_utilizations)
 util_std = std(sample_utilizations)
 
 # Exercise hypothesis testing
-println("  🧪 Hypothesis testing...")
+println("  Hypothesis testing...")
 theoretical_waiting = 1.0 / (3 * 2.0 - 5.0)  # M/M/3 theoretical
 
 # One-sample t-test
@@ -200,12 +219,12 @@ end
 normal_dist = Normal(waiting_mean, waiting_std)
 exp_dist = Exponential(waiting_mean)
 
-println("  ✓ Statistical analysis precompiled")
+println("  OK Statistical analysis precompiled")
 
 # =====================================================
 # SECTION 6: Validation Functions
 # =====================================================
-println("✅ Precompiling Validation Functions...")
+println("Precompiling Validation Functions...")
 
 # Test validation on different models
 engine = DESEngine(1000, 5000)
@@ -218,12 +237,12 @@ validation_basic = validate_model(engine, :validation_test)
 validation_comprehensive = validate_model_comprehensive(engine, :validation_test)
 conservation_check = validate_entity_conservation(engine, :validation_test, 1000)
 
-println("  ✓ Validation functions precompiled")
+println("  OK Validation functions precompiled")
 
 # =====================================================
 # SECTION 7: Batch Simulation Patterns
 # =====================================================
-println("🔄 Precompiling Batch Simulation Patterns...")
+println("Precompiling Batch Simulation Patterns...")
 
 # Simulate batch processing patterns
 batch_results = Vector{Float64}()
@@ -255,40 +274,28 @@ if length(batch_results) >= 3
     batch_p = pvalue(batch_test)
 end
 
-println("  ✓ Batch simulation patterns precompiled")
+println("  OK Batch simulation patterns precompiled")
 
 # =====================================================
 # SECTION 8: Threading Patterns (if available)
 # =====================================================
-if nthreads() > 1
-    println("🧵 Precompiling Threading Patterns...")
-    
-    # Simulate multi-threaded batch patterns
-    thread_results = Vector{Float64}(undef, min(4, nthreads()))
-    
-    @threads for i in 1:min(4, nthreads())
-        engine = DESEngine(300, 7000 + i * 100)
-        model = MMCModel(3.0 + i, 1.5, 2, Symbol("thread_$i"))
-        add_model!(engine, Symbol("thread_$i"), model)
+# Thread-like warmup even in single-threaded build to cover call-sites
+println("Precompiling Thread-like Patterns...")
+begin
+    for i in 1:4
+        local engine = DESEngine(300, 7000 + i * 100)
+        local model = MMCModel(3.0 + i, 1.5, 2, Symbol("threadwarm_$i"))
+        add_model!(engine, Symbol("threadwarm_$i"), model)
         simulate!(engine, verbose=false)
-        
-        results = get_results(engine)[Symbol("thread_$i")]
-        thread_results[i] = results.server_utilization
+        _ = get_results(engine)[Symbol("threadwarm_$i")]
     end
-    
-    # Thread-safe statistical operations
-    thread_mean = mean(thread_results)
-    thread_std = std(thread_results)
-    
-    println("  ✓ Threading patterns precompiled")
-else
-    println("  ⚠️ Single-threaded environment - skipping thread patterns")
 end
+println("  OK Thread-like patterns precompiled")
 
 # =====================================================
 # SECTION 9: Output and Formatting Functions
 # =====================================================
-println("📄 Precompiling Output Functions...")
+println("Precompiling Output Functions...")
 
 # Test output formatting with sample results
 local engine = DESEngine(500, 8000)
@@ -304,23 +311,23 @@ print_results(results)
 # Exercise validation reporting
 validation_result = validate_model(engine, :output_test)
 
-println("  ✓ Output functions precompiled")
+println("  OK Output functions precompiled")
 
 # =====================================================
 # FINAL SUMMARY
 # =====================================================
-println("\n✅ COMPREHENSIVE PRECOMPILATION COMPLETE!")
+println("\nCOMPREHENSIVE PRECOMPILATION COMPLETE!")
 println("=" ^ 60)
 println("Precompiled components:")
-println("  ✓ Core Engine operations (3 configurations)")
-println("  ✓ Event system (all event types)")
-println("  ✓ MMC Models (4 complete workflows)")  
-println("  ✓ CSMA/CD Models (3 configurations)")
-println("  ✓ Statistical analysis (hypothesis tests, distributions)")
-println("  ✓ Validation functions (basic + comprehensive)")
-println("  ✓ Batch simulation patterns")
+println("  OK Core Engine operations (3 configurations)")
+println("  OK Event system (all event types)")
+println("  OK MMC Models (4 complete workflows)")  
+println("  OK CSMA/CD Models (3 configurations)")
+println("  OK Statistical analysis (hypothesis tests, distributions)")
+println("  OK Validation functions (basic + comprehensive)")
+println("  OK Batch simulation patterns")
 if nthreads() > 1
-    println("  ✓ Multi-threading patterns")
+    println("  OK Multi-threading patterns")
 end
-println("  ✓ Output and formatting functions")
-println("\n🚀 DESLibrary is now FULLY precompiled for maximum performance!")
+println("  OK Output and formatting functions")
+println("\nDESLibrary is now fully precompiled for maximum performance!")

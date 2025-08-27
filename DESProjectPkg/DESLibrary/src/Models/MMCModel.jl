@@ -159,110 +159,78 @@ function initialize_model!(model::MMCModel, engine::DESEngine)
     model.total_departures = 0
 end
 
-function process_event!(model::MMCModel, event::ArrivalEvent, engine::DESEngine)
-    current_time = get_current_time(engine)
-    entity_id = get_entity_id(event)
-    
-    model.total_arrivals += 1
-    
-    increment_arrivals!(engine)
-    
-    model.arrival_times[entity_id] = current_time
-    
-    update_busy_times!(model, current_time, is_warmup_complete(engine))
-    
-    update_queue_area!(model, current_time, is_warmup_complete(engine))
-    
-    available_server = find_available_server(model)
-    
-    if available_server !== nothing
-        model.servers_busy[available_server] = true
-        model.current_customers[available_server] = entity_id
-        push!(model.busy_servers, available_server)
-        
-        if is_warmup_complete(engine)
-            push!(model.waiting_times, 0.0)
+function process_event!(model::MMCModel, event::GenericEvent, engine::DESEngine)
+    if event.event_type == :arrival
+        current_time = get_current_time(engine)
+        entity_id = get_entity_id(event)
+        model.total_arrivals += 1
+        increment_arrivals!(engine)
+        model.arrival_times[entity_id] = current_time
+        update_busy_times!(model, current_time, is_warmup_complete(engine))
+        update_queue_area!(model, current_time, is_warmup_complete(engine))
+        available_server = find_available_server(model)
+        if available_server !== nothing
+            model.servers_busy[available_server] = true
+            model.current_customers[available_server] = entity_id
+            push!(model.busy_servers, available_server)
+            if is_warmup_complete(engine)
+                push!(model.waiting_times, 0.0)
+            end
+            service_time = next_service_time!(engine.rng)
+            if is_warmup_complete(engine)
+                push!(model.service_times, service_time)
+            end
+            model.total_service_time += service_time
+            schedule_departure!(engine, entity_id, model.model_id, current_time + service_time)
+        else
+            push!(model.queue, entity_id)
+            model.max_queue_length = max(model.max_queue_length, length(model.queue))
         end
-        
-        service_time = next_service_time!(engine.rng)
-        
-        if is_warmup_complete(engine)
-            push!(model.service_times, service_time)
+        record_queue_length!(model, length(model.queue), current_time)
+        if should_generate_more_arrivals(engine)
+            next_arrival_time = current_time + next_arrival_time!(engine.rng)
+            next_entity_id = next_entity_id!(engine.rng)
+            schedule_arrival!(engine, next_entity_id, model.model_id, next_arrival_time)
         end
-        model.total_service_time += service_time
-        
-        schedule_departure!(engine, entity_id, model.model_id, current_time + service_time)
+        model.last_event_time = current_time
+    elseif event.event_type == :departure
+        current_time = get_current_time(engine)
+        entity_id = get_entity_id(event)
+        model.total_departures += 1
+        update_busy_times!(model, current_time, is_warmup_complete(engine))
+        update_queue_area!(model, current_time, is_warmup_complete(engine))
+        increment_entities!(engine)
+        server_index = find_server_for_customer(model, entity_id)
+        if server_index === nothing
+            error("Departing entity $entity_id not found on any server")
+        end
+        model.servers_busy[server_index] = false
+        model.current_customers[server_index] = 0
+        delete!(model.busy_servers, server_index)
+        if !isempty(model.queue)
+            next_customer = popfirst!(model.queue)
+            arrival_time = model.arrival_times[next_customer]
+            waiting_time = current_time - arrival_time
+            if is_warmup_complete(engine)
+                push!(model.waiting_times, waiting_time)
+            end
+            model.total_waiting_time += waiting_time
+            service_time = next_service_time!(engine.rng)
+            if is_warmup_complete(engine)
+                push!(model.service_times, service_time)
+            end
+            model.total_service_time += service_time
+            model.servers_busy[server_index] = true
+            model.current_customers[server_index] = next_customer
+            push!(model.busy_servers, server_index)
+            schedule_departure!(engine, next_customer, model.model_id, current_time + service_time)
+        end
+        record_queue_length!(model, length(model.queue), current_time)
+        delete!(model.arrival_times, entity_id)
+        model.last_event_time = current_time
     else
-        push!(model.queue, entity_id)
-        model.max_queue_length = max(model.max_queue_length, length(model.queue))
+        error("MMCModel does not handle event type $(event.event_type)")
     end
-    
-    record_queue_length!(model, length(model.queue), current_time)
-    
-    if should_generate_more_arrivals(engine)
-        next_arrival_time = current_time + next_arrival_time!(engine.rng)
-        next_entity_id = next_entity_id!(engine.rng)
-        schedule_arrival!(engine, next_entity_id, model.model_id, next_arrival_time)
-    end
-    
-    model.last_event_time = current_time
-end
-
-function process_event!(model::MMCModel, event::DepartureEvent, engine::DESEngine)
-    current_time = get_current_time(engine)
-    entity_id = get_entity_id(event)
-    
-    model.total_departures += 1
-    
-    update_busy_times!(model, current_time, is_warmup_complete(engine))
-    
-    update_queue_area!(model, current_time, is_warmup_complete(engine))
-    
-    increment_entities!(engine)
-    
-    server_index = find_server_for_customer(model, entity_id)
-    if server_index === nothing
-        error("Departing entity $entity_id not found on any server")
-    end
-    
-    model.servers_busy[server_index] = false
-    model.current_customers[server_index] = 0
-    delete!(model.busy_servers, server_index)
-    
-    if !isempty(model.queue)
-        next_customer = popfirst!(model.queue)
-        
-        arrival_time = model.arrival_times[next_customer]
-        waiting_time = current_time - arrival_time
-        
-        if is_warmup_complete(engine)
-            push!(model.waiting_times, waiting_time)
-        end
-        model.total_waiting_time += waiting_time
-        
-        service_time = next_service_time!(engine.rng)
-        
-        if is_warmup_complete(engine)
-            push!(model.service_times, service_time)
-        end
-        model.total_service_time += service_time
-        
-        model.servers_busy[server_index] = true
-        model.current_customers[server_index] = next_customer
-        push!(model.busy_servers, server_index)
-        
-        schedule_departure!(engine, next_customer, model.model_id, current_time + service_time)
-    end
-    
-    record_queue_length!(model, length(model.queue), current_time)
-    
-    delete!(model.arrival_times, entity_id)
-    
-    model.last_event_time = current_time
-end
-
-function process_event!(model::MMCModel, event::Event, engine::DESEngine)
-    error("MMCModel does not handle event type $(typeof(event))")
 end
 
 function finalize_model!(model::MMCModel, engine::DESEngine)

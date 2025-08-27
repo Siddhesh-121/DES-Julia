@@ -11,7 +11,7 @@ using Distributions
 try
     using HypothesisTests
 catch e
-    println("📦 Installing HypothesisTests.jl...")
+    println(" Installing HypothesisTests.jl...")
     using Pkg
     Pkg.add("HypothesisTests")
     using HypothesisTests
@@ -138,7 +138,7 @@ function DESLibrary.initialize_model!(model::LocalEnhancedCSMACDModel, engine::D
         event = create_generic_event(interarrival, node, model.model_id, :frame_generated)
         DESLibrary.schedule_event!(engine, event)
     end
-    println("✅ Initialized $(model.num_nodes) nodes with frame generation (target: $(model.max_frames) frames)")
+    println(" Initialized $(model.num_nodes) nodes with frame generation (target: $(model.max_frames) frames)")
 end
 
 function DESLibrary.finalize_model!(model::LocalEnhancedCSMACDModel, engine::DESEngine)
@@ -412,13 +412,13 @@ function run_single_csmacd_simulation(config::CSMACDBatchConfig, batch_id::Int)
         )
         
     catch e
-        println("\n❌ Error in batch $batch_id on thread $(threadid()): $e")
+        println("\n Error in batch $batch_id on thread $(threadid()): $e")
         rethrow(e)
     end
 end
 
 function run_csmacd_batch_simulations(config::CSMACDBatchConfig)
-    println("🚀 Starting CSMA/CD Batch Simulations")
+    println("Starting CSMA/CD Batch Simulations")
     println("=" ^ 60)
     println("Configuration:")
     println("  Network nodes: $(config.num_nodes)")
@@ -428,11 +428,11 @@ function run_csmacd_batch_simulations(config::CSMACDBatchConfig)
     println("  Available threads: $(nthreads())")
     println("  Using threads: $(config.num_threads)")
     
-    println("\n⏱️  Executing batch simulations...")
+    println("\nExecuting batch simulations...")
     
     results = Vector{CSMACDBatchResult}(undef, config.num_batches)
     
-    println("\n🔥 Per-thread warmup (eliminating cold start JIT compilation)...")
+    println("\n Per-thread warmup (eliminating cold start JIT compilation)...")
     warmup_start_time = time()
     warmup_tasks = Vector{Task}(undef, min(config.num_threads, nthreads()))
     warmup_runtimes = Vector{Float64}(undef, min(config.num_threads, nthreads()))
@@ -468,7 +468,7 @@ function run_csmacd_batch_simulations(config::CSMACDBatchConfig)
         warmup_total_time = (time() - warmup_start_time) * 1000
         warmup_mean = mean(warmup_runtimes[warmup_runtimes .> 0])
         
-        println("✅ All $(min(config.num_threads, nthreads())) threads warmed up")
+        println(" All $(min(config.num_threads, nthreads())) threads warmed up")
         println("   Warmup statistics:")
         println("   - Total warmup time: $(round(warmup_total_time, digits=1))ms")
         println("   - Mean warmup per thread: $(round(warmup_mean, digits=1))ms")
@@ -512,25 +512,27 @@ function run_csmacd_batch_simulations(config::CSMACDBatchConfig)
     batch_end_time = time()
     total_batch_time = batch_end_time - batch_start_time
     
-    println("\n✅ Completed $(config.num_batches) batches in $(round(total_batch_time, digits=2))s")
+    println("\nCompleted $(config.num_batches) batches in $(round(total_batch_time, digits=2))s")
     
     return results
 end
 
-println("🏗️  CSMA/CD Batch Analysis Framework")
-println("=" ^ 60)
-println("Statistical Testing for CSMA/CD Network Protocol")
-println()
+function entry_banner_csmacd()
+    println("CSMA/CD Batch Analysis Framework")
+    println("=" ^ 60)
+    println("Statistical Testing for CSMA/CD Network Protocol")
+    println()
 
-println("🧵 Thread Configuration:")
-println("   Available threads: $(nthreads())")
-if nthreads() == 1
-    println("   ⚠️  Running in single-threaded mode.")
-    println("   💡 To enable multi-threading, start Julia with: julia -t auto")
-else
-    println("   ✅ Multi-threading enabled")
+    println("Thread Configuration:")
+    println("   Available threads: $(nthreads())")
+    if nthreads() == 1
+        println("   Running in single-threaded mode.")
+        println("   To enable multi-threading, start Julia with: julia -t auto")
+    else
+        println("   Multi-threading enabled")
+    end
+    println()
 end
-println()
 
 
 function run_csmacd_batch_analysis(;
@@ -540,7 +542,7 @@ function run_csmacd_batch_analysis(;
     max_frames::Int=100000,
     confidence_level::Float64=0.95
 )
-    println("🔄 Starting CSMA/CD Batch Analysis...")
+    println("Starting CSMA/CD Batch Analysis...")
     
     try
         config = CSMACDBatchConfig(
@@ -570,11 +572,11 @@ function run_csmacd_batch_analysis(;
             config = config
         )
         
-        println("✅ CSMA/CD analysis completed successfully")
+        println("CSMA/CD analysis completed successfully")
         return result
         
     catch e
-        println("❌ CSMA/CD analysis failed: $e")
+        println("CSMA/CD analysis failed: $e")
         @show e
         return nothing
     end
@@ -583,16 +585,16 @@ end
 
 function analyze_csmacd_results(csmacd_result)
     if csmacd_result === nothing
-        println("⚠️ Cannot perform analysis - CSMA/CD simulation failed")
+        println("Cannot perform analysis - CSMA/CD simulation failed")
         return nothing
     end
     
-    println("\n🔬 CSMA/CD DETAILED ANALYSIS")
+    println("\nCSMA/CD DETAILED ANALYSIS")
     println("=" ^ 60)
     
     csmacd_stats = csmacd_result.statistics
     
-    println("📡 NETWORK PERFORMANCE INSIGHTS")
+    println("NETWORK PERFORMANCE INSIGHTS")
     println("-" ^ 40)
     
     batch_count = length(csmacd_result.results)
@@ -610,7 +612,7 @@ function analyze_csmacd_results(csmacd_result)
     @printf("Avg drops/batch:      %.0f\n", avg_drops)
     @printf("Network event rate:   ~%.0f events/second\n", events_per_sec)
     
-    println("\n⏱️  INDIVIDUAL BATCH RUNTIMES")
+    println("\nINDIVIDUAL BATCH RUNTIMES")
     println("-" ^ 40)
     println("Batch | Runtime (ms) | Thread ID | Successes | Collisions | Drops")
     println("-" ^ 65)
@@ -620,7 +622,7 @@ function analyze_csmacd_results(csmacd_result)
     
     for (i, result) in enumerate(csmacd_result.results)
         deviation_pct = ((result.runtime_ms - mean_runtime) / mean_runtime) * 100
-        deviation_symbol = if abs(deviation_pct) < 10 "  ≈" elseif deviation_pct > 0 "  ↑" else "  ↓" end
+        deviation_symbol = if abs(deviation_pct) < 10 "  ~" elseif deviation_pct > 0 "  +" else "  -" end
         @printf("%5d | %11.2f | %9d | %9d | %10d | %5d %s\n",
                 i, result.runtime_ms, result.thread_id,
                 result.successful_transmissions, result.total_collisions, 
@@ -636,7 +638,7 @@ function analyze_csmacd_results(csmacd_result)
     @printf("  Min:    %.2f ms\n", minimum(runtimes))
     @printf("  Max:    %.2f ms\n", maximum(runtimes))
     
-    println("\n⚡ EFFICIENCY ASSESSMENT")
+    println("\nEFFICIENCY ASSESSMENT")
     println("-" ^ 40)
     
     throughput = csmacd_stats.throughput_stats.mean
@@ -656,7 +658,7 @@ function analyze_csmacd_results(csmacd_result)
     @printf("Frame loss rate:      %.2f%%\n", loss_rate)
     @printf("Fairness index:       %.4f (1.0 = perfect)\n", fairness)
     
-    println("\n📊 CONSISTENCY ASSESSMENT")
+    println("\nCONSISTENCY ASSESSMENT")
     println("-" ^ 40)
     
     runtime_cv = csmacd_stats.runtime_stats.mean > 0 ? csmacd_stats.runtime_stats.std / csmacd_stats.runtime_stats.mean : 0.0
@@ -666,7 +668,7 @@ function analyze_csmacd_results(csmacd_result)
     csmacd_consistent = runtime_cv < consistency_threshold
     
     @printf("Runtime consistency:  %s (CV: %.4f)\n", 
-            csmacd_consistent ? "✅ High" : "⚠️ Moderate", runtime_cv)
+            csmacd_consistent ? "High" : "Moderate", runtime_cv)
     @printf("Throughput consistency: CV: %.4f\n", throughput_cv)
     
     tests_passed = 0
@@ -681,17 +683,17 @@ function analyze_csmacd_results(csmacd_result)
             tests_passed, total_tests, (tests_passed/total_tests)*100)
     
     if fairness < 0.8
-        println("\n⚠️ FAIRNESS ISSUES DETECTED")
+        println("\nFAIRNESS ISSUES DETECTED")
         println("-" ^ 40)
         @printf("Network fairness index: %.4f (below 0.8 threshold)\n", fairness)
         println("Some nodes may be experiencing unequal access to the channel")
     else
-        println("\n✅ FAIRNESS ASSESSMENT")
+        println("\n FAIRNESS ASSESSMENT")
         println("-" ^ 40)
         println("All nodes performing within acceptable range")
     end
     
-    println("\n💡 RECOMMENDATIONS")
+    println("\nRECOMMENDATIONS")
     println("-" ^ 40)
     
     if efficiency < 0.5
@@ -736,7 +738,7 @@ end
 
 function run_csmacd_analysis(; num_batches::Int=20, num_nodes::Int=10, λ::Float64=5.0, 
                               max_frames::Int=100000, confidence_level::Float64=0.95)
-    println("🎯 CSMA/CD BATCH ANALYSIS")
+    println("CSMA/CD BATCH ANALYSIS")
     println("Network: $num_nodes nodes with λ=$λ frames/time")
     println("Target: $max_frames frames generated per batch")
     println("Batches: $num_batches")
@@ -757,7 +759,7 @@ function run_csmacd_analysis(; num_batches::Int=20, num_nodes::Int=10, λ::Float
     
     total_time = time() - start_time
     
-    println("\n🏁 ANALYSIS COMPLETE")
+    println("\nANALYSIS COMPLETE")
     println("=" ^ 60)
     @printf("Total execution time: %.2f seconds\n", total_time)
     @printf("Batches completed: %d\n", num_batches)
@@ -772,30 +774,27 @@ end
 
 
 function quick_test()
-    println("🚀 Running Quick CSMA/CD Test (3 batches)...")
+    println("Running Quick CSMA/CD Test (3 batches)...")
     return run_csmacd_analysis(num_batches=3, max_frames=100000)
 end
 
 
 function standard_test()
-    println("🚀 Running Standard CSMA/CD Test (10 batches)...")
+    println("Running Standard CSMA/CD Test (10 batches)...")
     return run_csmacd_analysis(num_batches=20, max_frames=100000)
 end
 
 
 function extensive_test()
-    println("🚀 Running Extensive CSMA/CD Test (25 batches)...")
+    println("Running Extensive CSMA/CD Test (25 batches)...")
     return run_csmacd_analysis(num_batches=30, max_frames=100000)
 end
 
 
 if abspath(PROGRAM_FILE) == @__FILE__
+    entry_banner_csmacd()
     println()
-    
     println("Running standard CSMA/CD test...")
-    
     println("🔧 Testing with multi-threading...")
-    result = run_csmacd_analysis(num_batches=20, max_frames=100000)  # Standard test
-    
-    
+    result = run_csmacd_analysis(num_batches=20, max_frames=100000)
 end

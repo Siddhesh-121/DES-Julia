@@ -161,7 +161,7 @@ end
 
 
 function run_batch_simulations(config::BatchConfig)
-    println("🚀 Starting MMC Batch Simulations")
+    println("Starting MMC Batch Simulations")
     println("=" ^ 60)
     println("Configuration:")
     println("  M/M/$(config.c) system: λ=$(config.λ), μ=$(config.μ)")
@@ -173,13 +173,13 @@ function run_batch_simulations(config::BatchConfig)
     
     ρ_per_server = config.λ / (config.c * config.μ)
     println("  Traffic intensity per server: $(round(ρ_per_server, digits=3))")
-    println("  System status: $(ρ_per_server < 1.0 ? "✅ Stable" : "❌ Unstable")")
+    println("  System status: $(ρ_per_server < 1.0 ? "Stable" : "Unstable")")
     
     if ρ_per_server >= 1.0
         error("System is unstable. Please adjust parameters.")
     end
     
-    println("\n🔥 Per-thread warmup (eliminating cold start JIT compilation)...")
+    println("\nPer-thread warmup (eliminating cold start JIT compilation)...")
     
     warmup_tasks = Vector{Task}(undef, min(config.num_threads, nthreads()))
     warmup_config = BatchConfig(
@@ -194,17 +194,17 @@ function run_batch_simulations(config::BatchConfig)
         for i in 1:min(config.num_threads, nthreads())
             warmup_tasks[i] = @spawn begin
                 run_single_simulation(warmup_config, i)
-                println("Thread $(threadid()) warmed up ✓")
+                println("Thread $(threadid()) warmed up")
             end
         end
         
         for task in warmup_tasks
             wait(task)
         end
-        println("✅ All $(min(config.num_threads, nthreads())) threads warmed up")
+        println("All $(min(config.num_threads, nthreads())) threads warmed up")
     end
     
-    println("\n⏱️  Executing batch simulations...")
+    println("\nExecuting batch simulations...")
     
     threads_used = Set{Int}()
     thread_lock = ReentrantLock()
@@ -257,29 +257,29 @@ function run_batch_simulations(config::BatchConfig)
     batch_end_time = time()
     total_batch_time = batch_end_time - batch_start_time
     
-    println("\n✅ Completed $(config.num_batches) batches in $(round(total_batch_time, digits=2))s")
+    println("\nCompleted $(config.num_batches) batches in $(round(total_batch_time, digits=2))s")
     
     actual_threads_used = length(threads_used)
     max_concurrent = min(config.num_threads, config.num_batches, nthreads())
     max_unique_possible = min(config.num_batches, nthreads())
     
-    println("📊 Thread usage analysis:")
+    println("Thread usage analysis:")
     println("   Configured max concurrent: $(config.num_threads)")
     println("   Effective max concurrent: $(max_concurrent)")
     println("   Unique threads used: $(actual_threads_used)")
     println("   Thread IDs used: $(sort(collect(threads_used)))")
     
     if config.num_threads == 1 && actual_threads_used == 1
-        println("✅ Single-threaded execution verified")
+        println("Single-threaded execution verified")
     elseif config.num_threads >= nthreads() && actual_threads_used <= nthreads()
-        println("✅ Multi-threaded execution using available threads")
+        println("Multi-threaded execution using available threads")
     elseif actual_threads_used <= max_unique_possible
-        println("✅ Thread usage within expected bounds")
+        println("Thread usage within expected bounds")
         if actual_threads_used > config.num_threads
             println("   Note: Julia scheduler may use more unique threads than max concurrent")
         end
     else
-        println("⚠️  Unexpected thread usage pattern")
+        println("Unexpected thread usage pattern")
     end
     
     return results
@@ -288,7 +288,7 @@ end
 
 
 function perform_statistical_analysis(results::Vector{BatchResult}, config::BatchConfig)
-    println("\n📊 STATISTICAL ANALYSIS")
+    println("\nSTATISTICAL ANALYSIS")
     println("=" ^ 60)
     
     runtimes = [r.runtime_ms for r in results]
@@ -302,14 +302,14 @@ function perform_statistical_analysis(results::Vector{BatchResult}, config::Batc
     queue_errors = [r.queue_length_error for r in results]
     littles_errors = [r.littles_law_error for r in results]
     
-    println("\n🕐 RUNTIME PERFORMANCE")
+    println("\nRUNTIME PERFORMANCE")
     println("-" ^ 40)
     @printf("Mean runtime: %.2f ± %.2f ms\n", mean(runtimes), std(runtimes))
     @printf("Median runtime: %.2f ms\n", median(runtimes))
     @printf("Min/Max runtime: %.2f / %.2f ms\n", minimum(runtimes), maximum(runtimes))
     @printf("CV (coefficient of variation): %.4f\n", std(runtimes) / mean(runtimes))
     
-    println("\n📊 INDIVIDUAL BATCH RUNTIMES")
+    println("\nINDIVIDUAL BATCH RUNTIMES")
     println("-" ^ 50)
     println("Batch | Runtime (ms) | Thread ID | Entities | Deviation")
     println("-" ^ 55)
@@ -330,7 +330,7 @@ function perform_statistical_analysis(results::Vector{BatchResult}, config::Batc
                 result.entities_processed, deviation_pct, deviation_symbol)
     end
     
-    println("\n📈 RUNTIME DISTRIBUTION ANALYSIS")
+    println("\nRUNTIME DISTRIBUTION ANALYSIS")
     println("-" ^ 40)
     
     fast_threshold = mean_runtime - std(runtimes)
@@ -348,7 +348,7 @@ function perform_statistical_analysis(results::Vector{BatchResult}, config::Batc
             slow_threshold, length(slow_runs), (length(slow_runs)/length(runtimes))*100)
     
     if length(fast_runs) > 0 && length(slow_runs) > 0
-        println("\n🔍 VARIANCE PATTERN ANALYSIS")
+        println("\nVARIANCE PATTERN ANALYSIS")
         println("-" ^ 30)
         
         thread_runtimes = Dict{Int, Vector{Float64}}()
@@ -400,25 +400,25 @@ function perform_statistical_analysis(results::Vector{BatchResult}, config::Batc
             mean_later = mean(later_run_times)
             
             if mean_first > mean_later * 1.5  # First runs 50% slower
-                println("\n🎯 JIT COMPILATION PATTERN DETECTED!")
+                println("\nJIT COMPILATION PATTERN DETECTED!")
                 println("-" ^ 40)
                 @printf("First runs per thread: %.1f ms average\n", mean_first)
                 @printf("Subsequent runs: %.1f ms average\n", mean_later)
                 @printf("Cold start penalty: %.1f ms (%.1f%% slower)\n", 
                         mean_first - mean_later, ((mean_first / mean_later - 1) * 100))
-                println("\n💡 SOLUTION: Per-thread warmup implemented!")
+                println("\nSOLUTION: Per-thread warmup implemented!")
                 println("   Each thread now compiles code before timing begins.")
                 return  # Skip generic variance analysis since we found the specific cause
             end
         end
         
         if maximum(runtimes) > 2 * minimum(runtimes)
-            println("\n⚠️ POTENTIAL CAUSES OF HIGH VARIANCE:")
+            println("\n POTENTIAL CAUSES OF HIGH VARIANCE:")
             println("• Memory pressure or garbage collection")
             println("• Thread scheduling variations")
             println("• System load fluctuations")
             println("• Cache effects (first runs vs. later runs)")
-            println("💡 Consider: longer warmup, larger heap, process priority")
+            println("Consider: longer warmup, larger heap, process priority")
         end
     end
     
@@ -429,7 +429,7 @@ function perform_statistical_analysis(results::Vector{BatchResult}, config::Batc
     
     theoretical = calculate_mmc_theoretical(config.λ, config.μ, config.c)
     
-    println("\n🎯 ACCURACY ANALYSIS")
+    println("\nACCURACY ANALYSIS")
     println("-" ^ 40)
     @printf("Waiting time error: %.4f ± %.4f (%.2f%%)\n", 
             mean(waiting_errors), std(waiting_errors), mean(waiting_errors) * 100)
@@ -444,7 +444,7 @@ function perform_statistical_analysis(results::Vector{BatchResult}, config::Batc
     @printf("Little's Law validation success rate: %.1f%% (%d/%d)\n", 
             (littles_valid_count / length(results)) * 100, littles_valid_count, length(results))
     
-    println("\n🧪 HYPOTHESIS TESTING")
+    println("\nHYPOTHESIS TESTING")
     println("-" ^ 40)
     
     cv_threshold = 0.2  # 20% coefficient of variation (achievable with warmup)
@@ -452,22 +452,22 @@ function perform_statistical_analysis(results::Vector{BatchResult}, config::Batc
     println("H₁: Runtime consistency (CV < $(cv_threshold))")
     if length(runtimes) > 1
         @printf("   Result: CV = %.4f %s\n", runtime_cv, 
-                runtime_cv < cv_threshold ? "✅ PASS" : "❌ FAIL")
+                runtime_cv < cv_threshold ? " PASS" : " FAIL")
         if runtime_cv > 0.4
-            println("   ⚠️  High variability may indicate per-thread JIT compilation")
+            println("     High variability may indicate per-thread JIT compilation")
             println("       Per-thread warmup should resolve this issue")
         elseif runtime_cv > cv_threshold
-            println("   ⚠️  Moderate variability - consider longer simulations")
+            println("     Moderate variability - consider longer simulations")
         end
     else
-        @printf("   Result: CV = N/A (single sample) ❌ FAIL\n")
+        @printf("   Result: CV = N/A (single sample) ❌= FAIL\n")
     end
     
     accuracy_threshold = 0.15  # 15% error tolerance (realistic for batch simulations)
     max_error = maximum([maximum(waiting_errors), maximum(utilization_errors), maximum(queue_errors)])
     println("H₂: Accuracy within tolerance (max error < $(accuracy_threshold))")
     @printf("   Result: Max error = %.4f %s\n", max_error, 
-            max_error < accuracy_threshold ? "✅ PASS" : "❌ FAIL")
+            max_error < accuracy_threshold ? " PASS" : " FAIL")
     if max_error > 0.1
         println("   💡 Consider increasing simulation size for better accuracy")
     end
@@ -483,15 +483,15 @@ function perform_statistical_analysis(results::Vector{BatchResult}, config::Batc
             waiting_time_test_passed = test_pvalue > α
             @printf("   t-statistic: %.4f, p-value: %.6f\n", waiting_time_test.t, test_pvalue)
             @printf("   Result: %s (α = %.3f)\n", 
-                    waiting_time_test_passed ? "✅ ACCEPT H₀" : "❌ REJECT H₀", α)
+                    waiting_time_test_passed ? " ACCEPT H₀" : " REJECT H₀", α)
         catch e
-            println("   ⚠️ t-test failed: $e")
-            @printf("   Result: ❌ FAIL (test error)\n")
+            println("    t-test failed: $e")
+            @printf("   Result:  FAIL (test error)\n")
             waiting_time_test_passed = false
         end
     else
-        println("   ⚠️ Insufficient data for t-test (need ≥2 samples with non-zero variance)")
-        @printf("   Result: ❌ FAIL (insufficient data)\n")
+        println("    Insufficient data for t-test (need ≥2 samples with non-zero variance)")
+        @printf("   Result:  FAIL (insufficient data)\n")
         waiting_time_test_passed = false
     end
     
@@ -501,9 +501,9 @@ function perform_statistical_analysis(results::Vector{BatchResult}, config::Batc
             runtime_normality = ExactOneSampleKSTest(runtimes, Normal(mean(runtimes), std(runtimes)))
             @printf("   KS test p-value: %.6f\n", pvalue(runtime_normality))
             @printf("   Result: %s\n", 
-                    pvalue(runtime_normality) > α ? "✅ Normal distribution" : "⚠️ Non-normal distribution")
+                    pvalue(runtime_normality) > α ? " Normal distribution" : " Non-normal distribution")
         catch e
-            println("   ⚠️ Normality test failed: $e")
+            println("    Normality test failed: $e")
         end
     end
     
@@ -511,7 +511,7 @@ function perform_statistical_analysis(results::Vector{BatchResult}, config::Batc
     success_threshold = 0.95  # 95% success rate expected
     println("H₅: Little's Law validation success rate ≥ $(success_threshold)")
     @printf("   Result: %.2f %s\n", littles_success_rate, 
-            littles_success_rate >= success_threshold ? "✅ PASS" : "❌ FAIL")
+            littles_success_rate >= success_threshold ? " PASS" : " FAIL")
     
     return (
         runtime_stats = (mean=mean(runtimes), std=std(runtimes), cv=runtime_cv),
@@ -531,7 +531,7 @@ end
 function main_mmc(; num_batches::Int=10, λ::Float64=10.0, μ::Float64=2.0, c::Int=6, 
                   max_entities::Int=50000, confidence_level::Float64=0.95)
     
-    println("🏗️  MMC BATCH SIMULATION FRAMEWORK")
+    println("MMC BATCH SIMULATION FRAMEWORK")
     println("=" ^ 60)
     println("Multi-threaded Statistical Analysis for M/M/C Queueing Systems")
     println("Threads available: $(nthreads())")
@@ -546,18 +546,20 @@ function main_mmc(; num_batches::Int=10, λ::Float64=10.0, μ::Float64=2.0, c::I
     
     stats = perform_statistical_analysis(results, config)
     
-    println("\n📈 SUMMARY REPORT")
+    println("\nSUMMARY REPORT")
     println("=" ^ 60)
-    @printf("✅ Completed %d batches successfully\n", length(results))
-    @printf("⏱️  Mean runtime: %.2f ms (CV: %.4f)\n", 
+    @printf(" Completed %d batches successfully\n", length(results))
+    @printf("⏱  Mean runtime: %.2f ms (CV: %.4f)\n", 
             stats.runtime_stats.mean, stats.runtime_stats.cv)
-    @printf("🎯 Mean accuracy: %.2f%% error\n", 
+    @printf("Mean accuracy: %.2f%% error\n", 
             mean([stats.accuracy_stats.waiting, stats.accuracy_stats.utilization, 
                   stats.accuracy_stats.queue]) * 100)
-    @printf("🧪 Hypothesis tests passed: %d/5\n", 
+    @printf("Hypothesis tests passed: %d/4\n", 
             sum(values(stats.hypothesis_results)))
+    @printf("Hypothesis tests: %s\n", 
+            stats.hypothesis_results)       
     
-    println("\n✅ MMC Batch Simulation completed successfully!")
+    println("\n MMC Batch Simulation completed successfully!")
     
     return (config=config, results=results, statistics=stats)
 end

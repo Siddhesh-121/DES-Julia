@@ -7,7 +7,7 @@ Build script for creating optimized DESLibrary system image using PackageCompile
 using PackageCompiler
 using Pkg
 
-println("🏗️  Building DESLibrary System Image")
+println("Building DESLibrary System Image")
 println("=" ^ 60)
 
 # Ensure we have all required packages
@@ -21,15 +21,15 @@ required_packages = [
     "Printf"
 ]
 
-println("📦 Checking required packages...")
+println("Checking required packages...")
 for pkg in required_packages
     try
         eval(:(using $(Symbol(pkg))))
-        println("  ✅ $pkg")
+        println("  OK $pkg")
     catch e
-        println("  ⚠️  Installing $pkg...")
+        println("  Installing $pkg...")
         Pkg.add(pkg)
-        println("  ✅ $pkg installed")
+        println("  OK $pkg installed")
     end
 end
 
@@ -37,7 +37,7 @@ end
 const SYSIMAGE_PATH = "DESLibrary_compiled.so"
 const PRECOMPILE_SCRIPT = "precompile/precompile_workload.jl"
 
-println("\n🔧 Build Configuration:")
+println("\nBuild Configuration:")
 println("  Output path: $SYSIMAGE_PATH")
 println("  Precompile script: $PRECOMPILE_SCRIPT")
 println("  Julia version: $(VERSION)")
@@ -45,40 +45,36 @@ println("  Available threads: $(Threads.nthreads())")
 
 # Check if precompile script exists
 if !isfile(PRECOMPILE_SCRIPT)
-    error("❌ Precompile script not found: $PRECOMPILE_SCRIPT")
+    error("Precompile script not found: $PRECOMPILE_SCRIPT")
 end
 
-println("\n🚀 Starting system image compilation...")
-println("⚠️  This may take 5-15 minutes depending on your system...")
+println("\nStarting system image compilation...")
+println("This may take 5-15 minutes depending on your system...")
 
 start_time = time()
 
 try
     # Create system image with precompilation
     create_sysimage(
-        String[];  # No additional packages - we're compiling our local code
+        [:DataStructures, :Distributions, :SpecialFunctions, :HypothesisTests];
         sysimage_path = SYSIMAGE_PATH,
         precompile_execution_file = PRECOMPILE_SCRIPT,
         cpu_target = "generic",
-        include_transitive_dependencies = true
+        include_transitive_dependencies = true,
+        incremental = false
     )
     
-    # Alternative: Create without precompile (much less benefit)
-    # create_sysimage(
-    #     String[];
-    #     sysimage_path = SYSIMAGE_PATH,
-    #     replace_default = false
-    # )
+    
     
     compile_time = time() - start_time
     
-    println("\n✅ System image compilation successful!")
-    println("📊 Compilation Statistics:")
+    println("\nSystem image compilation successful!")
+    println("Compilation Statistics:")
     println("  Compilation time: $(round(compile_time, digits=1)) seconds")
     println("  System image size: $(round(stat(SYSIMAGE_PATH).size / 1024^2, digits=1)) MB")
     println("  Output location: $(abspath(SYSIMAGE_PATH))")
     
-    println("\n🚀 Usage Instructions:")
+    println("\nUsage Instructions:")
     println("  To use the compiled system image:")
     println("  julia --sysimage $(SYSIMAGE_PATH) your_script.jl")
     println()
@@ -87,10 +83,10 @@ try
     println("  julia --sysimage $(SYSIMAGE_PATH) -t 4 run_csmacd_analysis.jl")
     
 catch e
-    println("\n❌ System image compilation failed!")
+    println("\nSystem image compilation failed!")
     println("Error: $e")
     
-    println("\n🔧 Troubleshooting:")
+    println("\nTroubleshooting:")
     println("  1. Ensure all dependencies are installed")
     println("  2. Check that precompile script runs successfully:")
     println("     julia precompile/precompile_workload.jl")

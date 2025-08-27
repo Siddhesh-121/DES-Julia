@@ -1,0 +1,175 @@
+MMC Batch Analysis Framework
+============================================================      
+Statistical Testing for M/M/C Queueing Systems
+
+Thread Configuration:
+   Available threads: 4
+   Multi-threading enabled
+
+
+Running standard MMC test...
+ Running Standard MMC Test (20 batches)...
+MMC BATCH ANALYSIS
+System: M/M/6 with λ=10.0, μ=2.0
+Batches: 20, Entities per batch: 100000
+Confidence level: 95.0%
+
+Starting M/M/C Batch Analysis...
+MMC BATCH SIMULATION FRAMEWORK
+============================================================      
+Multi-threaded Statistical Analysis for M/M/C Queueing Systems    
+Threads available: 4
+
+Starting MMC Batch Simulations
+============================================================      
+Configuration:
+  M/M/6 system: λ=10.0, μ=2.0
+  Entities per simulation: 100000
+  Number of batches: 20
+  Available threads: 4
+  Using threads: 4
+  Confidence level: 95.0%
+  Traffic intensity per server: 0.833
+  System status: Stable
+
+Per-thread warmup (eliminating cold start JIT compilation)...     
+Thread 4 warmed up
+Thread 2 warmed up
+Thread 1 warmed up
+Thread 3 warmed up
+All 4 threads warmed up
+
+Executing batch simulations...
+....................
+Completed 20 batches in 0.91s
+Thread usage analysis:
+   Configured max concurrent: 4
+   Effective max concurrent: 4
+   Unique threads used: 4
+   Thread IDs used: [1, 2, 3, 4]
+Multi-threaded execution using available threads
+
+STATISTICAL ANALYSIS
+============================================================      
+
+RUNTIME PERFORMANCE
+----------------------------------------
+Mean runtime: 167.95 ± 22.24 ms
+Median runtime: 174.00 ms
+Min/Max runtime: 125.00 / 201.00 ms
+CV (coefficient of variation): 0.1324
+
+INDIVIDUAL BATCH RUNTIMES
+--------------------------------------------------
+Batch | Runtime (ms) | Thread ID | Entities | Deviation
+-------------------------------------------------------
+    1 |      201.00 |         2 |    90000 |   19.7%   ↑
+    2 |      136.00 |         2 |    90000 |  -19.0%   ↓
+    3 |      179.00 |         2 |    90000 |    6.6%   ≈
+    4 |      182.00 |         2 |    90000 |    8.4%   ≈
+    5 |      165.00 |         2 |    90000 |   -1.8%   ≈
+    6 |      194.00 |         3 |    90000 |   15.5%   ↑
+    7 |      125.00 |         3 |    90000 |  -25.6%   ↓
+    8 |      188.00 |         3 |    90000 |   11.9%   ↑
+    9 |      180.00 |         3 |    90000 |    7.2%   ≈
+   10 |      175.00 |         3 |    90000 |    4.2%   ≈
+   11 |      151.00 |         1 |    90000 |  -10.1%   ↓
+   12 |      158.00 |         1 |    90000 |   -5.9%   ≈
+   13 |      172.00 |         1 |    90000 |    2.4%   ≈
+   14 |      166.00 |         1 |    90000 |   -1.2%   ≈
+   15 |      132.00 |         1 |    90000 |  -21.4%   ↓
+   16 |      197.00 |         4 |    90000 |   17.3%   ↑
+   17 |      134.00 |         4 |    90000 |  -20.2%   ↓
+   18 |      176.00 |         4 |    90000 |    4.8%   ≈
+   19 |      175.00 |         4 |    90000 |    4.2%   ≈
+   20 |      173.00 |         4 |    90000 |    3.0%   ≈
+
+RUNTIME DISTRIBUTION ANALYSIS
+----------------------------------------
+Fast runs (< 146 ms): 4 batches (20.0%)
+Normal runs (146-190 ms): 13 batches (65.0%)
+Slow runs (> 190 ms): 3 batches (15.0%)
+
+VARIANCE PATTERN ANALYSIS
+------------------------------
+Runtime by thread:
+Thread 1: 155.8 ± 15.5 ms (CV: 0.099)
+Thread 2: 172.6 ± 24.2 ms (CV: 0.140)
+Thread 3: 172.4 ± 27.5 ms (CV: 0.159)
+Thread 4: 171.0 ± 22.9 ms (CV: 0.134)
+
+Trend analysis:
+First half mean: 172.5 ms
+Second half mean: 163.4 ms
+Trend: -9.1 ms (stable)
+
+ THROUGHPUT ANALYSIS
+----------------------------------------
+Mean throughput: 545824 ± 79761 entities/sec
+Throughput CV: 0.1461
+
+ACCURACY ANALYSIS
+----------------------------------------
+Waiting time error: 0.0508 ± 0.0390 (5.08%)
+Utilization error: 0.0035 ± 0.0027 (0.35%)
+Queue length error: 0.0523 ± 0.0393 (5.23%)
+Little's Law error: 0.0001 ± 0.0001 (0.01%)
+Little's Law validation success rate: 100.0% (20/20)
+
+HYPOTHESIS TESTING
+----------------------------------------
+H₁: Runtime consistency (CV < 0.2)
+   Result: CV = 0.1324  PASS
+H₂: Accuracy within tolerance (max error < 0.15)
+   Result: Max error = 0.1441  PASS
+    Consider increasing simulation size for better accuracy     
+H₃: Waiting time matches theoretical value
+   t-statistic: 0.5727, p-value: 0.573556
+   Result:  ACCEPT H₀ (α = 0.050)
+H₄: Runtime follows normal distribution
+┌ Warning: This test is inaccurate with ties
+└ @ HypothesisTests C:\Users\siddh\.julia\packages\HypothesisTests\xna7a\src\kolmogorov_smirnov.jl:68
+   KS test p-value: 0.536717
+   Result:  Normal distribution
+H₅: Little's Law validation success rate ≥ 0.95
+   Result: 1.00  PASS
+
+SUMMARY REPORT
+============================================================      
+ Completed 20 batches successfully
+⏱  Mean runtime: 167.95 ms (CV: 0.1324)
+Mean accuracy: 3.56% error
+Hypothesis tests passed: 4/4
+
+ MMC Batch Simulation completed successfully!
+M/M/C analysis completed successfully
+
+MMC DETAILED ANALYSIS
+============================================================      
+PERFORMANCE INSIGHTS
+----------------------------------------
+Batch count:          20
+Avg entities/batch:   90000
+Event processing rate: ~1071748 events/second
+
+ACCURACY ASSESSMENT
+----------------------------------------
+Overall accuracy:     3.56% average error
+Waiting time error:   5.08%
+Utilization error:    0.35%
+Queue length error:   5.23%
+Little's Law error:   0.01%
+
+PERFORMANCE ASSESSMENT
+----------------------------------------
+Runtime consistency:  Moderate (CV: 0.1324)
+Statistical tests:    4/4 passed (100%)
+
+RECOMMENDATIONS
+----------------------------------------
+
+ANALYSIS COMPLETE
+============================================================      
+Total execution time: 5.25 seconds
+Batches completed: 20
+Multi-threading efficiency: ~4.0x speedup

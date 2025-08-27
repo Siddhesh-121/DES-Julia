@@ -27,6 +27,7 @@ include("Models/ModelHelpers.jl")
 # Queue model implementations
 include("Models/MMCModel.jl")
 include("Models/CSMACDModel.jl")
+include("Models/EnhancedCSMACDModel.jl")
 
 # Utilities
 include("Utils/Statistics.jl")
@@ -36,8 +37,8 @@ include("Utils/Validation.jl")
 # Public API Exports
 # =====================
 export DESEngine, SimulationModel, QueueModel, SimulationResults
-export Event, ArrivalEvent, DepartureEvent, ServiceCompletionEvent, GenericEvent, create_generic_event
-export MMCModel, MM2Model, MM3Model, MM4Model, MM5Model, CSMACDModel
+export GenericEvent, DefaultEvent, create_generic_event
+export MMCModel, MM2Model, MM3Model, MM4Model, MM5Model, CSMACDModel, EnhancedCSMACDModel
 export simulate!, add_model!, get_results, validate_results, validate_model
 export increment_arrivals!
 export is_warmup_complete, reset_statistics!

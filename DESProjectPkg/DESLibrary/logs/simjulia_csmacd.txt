@@ -1,0 +1,6 @@
+    # println("\nQUEUE DISTRIBUTION")
+    # println("=" ^ 50)
+    # @printf("Max queue length: %d\n", max_queue)
+    # @printf("Min queue length: %d\n", min_queue)
+    # @printf("Average queue length: %.2f\n", avg_queue)
+    # @printf("Queue imbalance: %d\n", max_queue - min_queue)

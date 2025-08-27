@@ -197,9 +197,9 @@ function print_validation_report(validation_result)
     println("=== VALIDATION REPORT ===")
     
     if validation_result.is_valid
-        println("✅ VALIDATION PASSED")
+        println("VALIDATION PASSED")
     else
-        println("❌ VALIDATION FAILED")
+        println("VALIDATION FAILED")
         if haskey(validation_result, :error)
             println("Error: $(validation_result.error)")
         end
@@ -209,13 +209,13 @@ function print_validation_report(validation_result)
     if haskey(validation_result, :basic_checks)
         println("\nBasic Checks:")
         for (check, passed) in validation_result.basic_checks
-            status = passed ? "✅" : "❌"
+            status = passed ? "OK" : "FAIL"
             println("  $check: $status")
         end
     end
     
     if haskey(validation_result, :entity_count_correct)
-        status = validation_result.entity_count_correct ? "✅" : "❌"
+        status = validation_result.entity_count_correct ? "OK" : "FAIL"
         println("Entity count correct: $status")
     end
     
@@ -225,17 +225,17 @@ function print_validation_report(validation_result)
         
         if haskey(model_val, :littles_law)
             ll = model_val.littles_law
-            status = ll.is_valid ? "✅" : "❌"
+            status = ll.is_valid ? "OK" : "FAIL"
             println("  Little's Law: $status (error: $(round(ll.relative_error * 100, digits=2))%)")
         end
         
         if haskey(model_val, :within_tolerance)
-            status = model_val.within_tolerance ? "✅" : "❌"
+            status = model_val.within_tolerance ? "OK" : "FAIL"
             println("  Theoretical comparison: $status")
         end
         
         if haskey(model_val, :server_balance)
-            status = model_val.server_balance ? "✅" : "❌"
+            status = model_val.server_balance ? "OK" : "FAIL"
             println("  Server balance: $status")
         end
     end
@@ -248,21 +248,21 @@ function print_comprehensive_validation_report(validation_result)
     println("=== COMPREHENSIVE VALIDATION REPORT ===")
     
     if validation_result.is_valid
-        println("✅ ALL VALIDATIONS PASSED")
+        println("ALL VALIDATIONS PASSED")
     else
-        println("❌ VALIDATION FAILED")
+        println("VALIDATION FAILED")
     end
     
     # Print basic validation
     if haskey(validation_result, :basic_validation)
-        println("\n📊 Basic Validation:")
+        println("\nBasic Validation:")
         basic = validation_result.basic_validation
-        status = basic.is_valid ? "✅" : "❌"
+        status = basic.is_valid ? "OK" : "FAIL"
         println("  Overall: $status")
         
         if haskey(basic, :basic_checks)
             for (check, passed) in basic.basic_checks
-                status = passed ? "✅" : "❌"
+                status = passed ? "OK" : "FAIL"
                 println("    $check: $status")
             end
         end
@@ -270,9 +270,9 @@ function print_comprehensive_validation_report(validation_result)
     
     # Print entity conservation validation
     if haskey(validation_result, :conservation_validation)
-        println("\n🔄 Entity Conservation Validation:")
+        println("\nEntity Conservation Validation:")
         conserv = validation_result.conservation_validation
-        status = conserv.is_valid ? "✅" : "❌"
+        status = conserv.is_valid ? "OK" : "FAIL"
         println("  Overall: $status")
         
         println("  Arrivals: $(conserv.arrivals)")
@@ -282,13 +282,13 @@ function print_comprehensive_validation_report(validation_result)
         println("  Total entities in system: $(conserv.entities_in_system)")
         println("  Expected entities: $(conserv.expected_entities)")
         
-        status = conserv.conservation_valid ? "✅" : "❌"
+        status = conserv.conservation_valid ? "OK" : "FAIL"
         println("  Conservation (arrivals = departures + in_system): $status")
         
-        status = conserv.expected_count_valid ? "✅" : "❌"
+        status = conserv.expected_count_valid ? "OK" : "FAIL"
         println("  Expected count (arrivals = expected): $status")
         
-        status = conserv.complete_processing_valid ? "✅" : "❌"
+        status = conserv.complete_processing_valid ? "OK" : "FAIL"
         println("  Complete processing (in_system = 0): $status")
     end
     

@@ -173,22 +173,22 @@ def calculate_theoretical_values():
     }
 
 def main():
-    print("🏗️  M/M/C Queue Simulation using SimPy")
+    print("M/M/C Queue Simulation using SimPy")
     print("=" * 50)
-    print("📋 Configuration:")
-    print(f"  Arrival rate (λ): {LAMBDA} entities/time")
-    print(f"  Service rate (μ): {MU} entities/time per server")
+    print("Configuration:")
+    print(f"  Arrival rate (lambda): {LAMBDA} entities/time")
+    print(f"  Service rate (mu): {MU} entities/time per server")
     print(f"  Number of servers (c): {C}")
     print(f"  Total entities: {MAX_ENTITIES}")
     print(f"  Warmup period: {WARMUP_FRACTION*100:.1f}%")
     print(f"  Traffic intensity (ρ): {RHO:.3f}")
     print(f"  Traffic intensity per server (ρ/c): {RHO_PER_SERVER:.3f}")
-    print(f"  System status: {'✅ Stable' if RHO_PER_SERVER < 1.0 else '❌ Unstable'}")
+    print(f"  System status: {'Stable' if RHO_PER_SERVER < 1.0 else 'Unstable'}")
     
     if RHO_PER_SERVER >= 1.0:
-        print("⚠️  Warning: System is unstable (ρ/c ≥ 1.0). Results may be unreliable.")
+        print("Warning: System is unstable (ρ/c ≥ 1.0). Results may be unreliable.")
     
-    print("\n🚀 Starting simulation...")
+    print("\nStarting simulation...")
     
     np.random.seed(SEED)
     
@@ -215,7 +215,7 @@ def main():
     stats_throughput = stats.statistics_entities / wall_clock_time
     events_per_sec = stats.total_entities * 2 / wall_clock_time
     
-    print("\n⏱️  PERFORMANCE RESULTS")
+    print("\nPERFORMANCE RESULTS")
     print("=" * 50)
     print(f"  Wall-clock time: {wall_clock_time * 1000:.2f} ms")
     print(f"  Simulation time: {simulation_time:.2f} time units")
@@ -234,7 +234,7 @@ def main():
     total_server_busy_time = sum(stats.server_busy_times_stats)
     server_utilization = total_server_busy_time / (C * stats_collection_time) if stats_collection_time > 0 else 0.0
     
-    print("\n📊 SIMULATION STATISTICS")
+    print("\nSIMULATION STATISTICS")
     print("=" * 50)
     print(f"  Average waiting time: {avg_waiting_time:.4f} time units")
     print(f"  Average service time: {avg_service_time:.4f} time units")
@@ -243,7 +243,7 @@ def main():
     print(f"  Maximum queue length: {stats.max_queue_length} entities")
     print(f"  Server utilization: {server_utilization:.4f} ({server_utilization*100:.2f}%)")
     
-    print("\n🖥️  INDIVIDUAL SERVER UTILIZATIONS")
+    print("\nINDIVIDUAL SERVER UTILIZATIONS")
     print("=" * 50)
     server_utils = []
     for i in range(C):
@@ -256,12 +256,12 @@ def main():
         server_std = stdev(server_utils) if len(server_utils) > 1 else 0.0
         server_cv = server_std / server_mean if server_mean > 0 else 0.0
         print(f"  Server balance (CV): {server_cv:.6f} (lower is better)")
-        balance_status = "✅ Excellent" if server_cv < 0.01 else "✅ Good" if server_cv < 0.05 else "⚠️ Fair"
+        balance_status = "Excellent" if server_cv < 0.01 else "Good" if server_cv < 0.05 else "Fair"
         print(f"  Balance status: {balance_status}")
     
     theoretical = calculate_theoretical_values()
     
-    print("\n🎯 THEORETICAL CALCULATIONS")
+    print("\nTHEORETICAL CALCULATIONS")
     print("=" * 50)
     
     if RHO_PER_SERVER >= 1.0:
@@ -274,7 +274,7 @@ def main():
         print(f"  Theoretical utilization: {theoretical['utilization']:.4f} ({theoretical['utilization']*100:.2f}%)")
         print(f"  Erlang-C (P(wait)): {theoretical['erlang_c']:.6f}")
     
-    print("\n🔍 ACCURACY VALIDATION")
+    print("\nACCURACY VALIDATION")
     print("=" * 50)
     
     if RHO_PER_SERVER < 1.0:
@@ -301,18 +301,18 @@ def main():
         
         print(f"\n  Maximum relative error: {max_rel_error:.2f}%")
         if max_rel_error < 1.0:
-            print("  Accuracy status: ✅ Excellent (< 1% error)")
+            print("  Accuracy status: Excellent (< 1% error)")
         elif max_rel_error < 5.0:
-            print("  Accuracy status: ✅ Good (< 5% error)")
+            print("  Accuracy status: Good (< 5% error)")
         elif max_rel_error < 10.0:
-            print("  Accuracy status: ⚠️ Fair (< 10% error)")
+            print("  Accuracy status: Fair (< 10% error)")
         else:
-            print("  Accuracy status: ❌ Poor (≥ 10% error)")
+            print("  Accuracy status: Poor (≥ 10% error)")
     else:
         print("  System is unstable - accuracy validation not applicable")
         max_rel_error = 0.0
     
-    print("\n⚖️  LITTLE'S LAW VALIDATION")
+    print("\nLITTLE'S LAW VALIDATION")
     print("=" * 50)
     
     effective_arrival_rate = stats.statistics_entities / stats_collection_time if stats_collection_time > 0 else 0.0
@@ -324,33 +324,33 @@ def main():
     littles_law_rel_error = (littles_law_error / L) * 100 if L > 0 else 0.0
     
     print(f"  L (average queue length): {L:.4f}")
-    print(f"  λ (effective arrival rate): {effective_arrival_rate:.4f}")
+    print(f"  lambda (effective arrival rate): {effective_arrival_rate:.4f}")
     print(f"  W (average waiting time): {W:.4f}")
-    print(f"  λW (arrival rate × waiting time): {lambda_W:.4f}")
+    print(f"  lambda*W (arrival rate * waiting time): {lambda_W:.4f}")
     print(f"  |L - λW| (absolute error): {littles_law_error:.6f}")
     print(f"  Relative error: {littles_law_rel_error:.4f}%")
     
     if littles_law_rel_error < 1.0:
-        print("  Little's Law: ✅ Validated (< 1% error)")
+        print("  Little's Law: Validated (< 1% error)")
     elif littles_law_rel_error < 5.0:
-        print("  Little's Law: ✅ Acceptable (< 5% error)")
+        print("  Little's Law: Acceptable (< 5% error)")
     else:
-        print("  Little's Law: ⚠️ Questionable (≥ 5% error)")
+        print("  Little's Law: Questionable (≥ 5% error)")
     
-    print("\n🏆 SYSTEM PERFORMANCE SUMMARY")
+    print("\nSYSTEM PERFORMANCE SUMMARY")
     print("=" * 50)
     print(f"  Implementation: SimPy M/M/C")
-    print(f"  Configuration: λ={LAMBDA}, μ={MU}, c={C}")
+    print(f"  Configuration: lambda={LAMBDA}, mu={MU}, c={C}")
     print(f"  Entities processed: {stats.total_entities}")
     print(f"  Runtime: {wall_clock_time * 1000:.2f} ms")
     print(f"  Throughput: {total_throughput:.0f} entities/sec")
-    print(f"  Memory efficiency: ➖ No special optimization")
+    print(f"  Memory efficiency: No special optimization")
     print(f"  Server balance: {server_cv:.6f} CV" if len(server_utils) > 1 else "  Server balance: N/A")
     accuracy_text = f"{max_rel_error:.2f}% max error" if RHO_PER_SERVER < 1.0 else "N/A (unstable)"
     print(f"  Theoretical accuracy: {accuracy_text}")
     print(f"  Little's Law: {littles_law_rel_error:.4f}% error")
     
-    print("\n✅ SimPy M/M/C simulation completed successfully!")
+    print("\nSimPy M/M/C simulation completed successfully!")
 
 if __name__ == "__main__":
     main() 

@@ -1,13 +1,13 @@
 mutable struct EventQueue
-    heap::BinaryMinHeap{Event}
+    heap::BinaryMinHeap{GenericEvent}
     current_time::Float64
     
     function EventQueue()
-        new(BinaryMinHeap{Event}(), 0.0)
+        new(BinaryMinHeap{GenericEvent}(), 0.0)
     end
 end
 
-@inline function schedule_event!(queue::EventQueue, event::Event)
+@inline function schedule_event!(queue::EventQueue, event::GenericEvent)
     push!(queue.heap, event)
     nothing
 end

@@ -1,0 +1,137 @@
+CSMA/CD Batch Analysis Framework
+============================================================
+Statistical Testing for CSMA/CD Network Protocol
+
+Thread Configuration:
+   Available threads: 4
+   Multi-threading enabled
+
+
+Running standard CSMA/CD test...
+🔧 Testing with multi-threading...
+CSMA/CD BATCH ANALYSIS
+Network: 10 nodes with λ=5.0 frames/time
+Target: 100000 frames generated per batch
+Batches: 20
+Confidence level: 95.0%
+
+Starting CSMA/CD Batch Analysis...
+Starting CSMA/CD Batch Simulations
+============================================================
+Configuration:
+  Network nodes: 10
+  Frame rate: 5.0 frames/time unit
+  Max frames: 100000
+  Number of batches: 20
+  Available threads: 4
+  Using threads: 4
+
+Executing batch simulations...
+
+ Per-thread warmup (eliminating cold start JIT compilation)...
+ Initialized 10 nodes with frame generation (target: 100 frames)
+ Initialized 10 nodes with frame generation (target: 100 frames)
+ Initialized 10 nodes with frame generation (target: 100 frames)
+Thread 1 warmed up ✓ (643.0ms)
+ Initialized 10 nodes with frame generation (target: 100 frames)
+Thread 3 warmed up ✓ (640.0ms)
+Thread 2 warmed up ✓ (642.0ms)
+Thread 4 warmed up ✓ (648.0ms)
+ All 4 threads warmed up
+   Warmup statistics:
+   - Total warmup time: 664.0ms
+   - Mean warmup per thread: 643.2ms
+   - Individual warmup times: [643.0, 648.0, 642.0, 640.0]ms
+.... Initialized 10 nodes with frame generation (target: 100000 frames)
+ Initialized 10 nodes with frame generation (target: 100000 frames)
+ Initialized 10 nodes with frame generation (target: 100000 frames)
+ Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+
+Completed 20 batches in 3.45s
+CSMA/CD analysis completed successfully
+
+CSMA/CD DETAILED ANALYSIS
+============================================================
+NETWORK PERFORMANCE INSIGHTS
+----------------------------------------
+Batch count:          20
+Avg successes/batch:  99248
+Avg collisions/batch: 59794
+Avg drops/batch:      752
+Network event rate:   ~236767 events/second
+
+INDIVIDUAL BATCH RUNTIMES
+----------------------------------------
+Batch | Runtime (ms) | Thread ID | Successes | Collisions | Drops
+-----------------------------------------------------------------
+    1 |      739.00 |         2 |     99237 |      59897 |   763   ~
+    2 |      722.00 |         2 |     99163 |      60621 |   837   ~
+    3 |      681.00 |         2 |     99102 |      61162 |   898   ~
+    4 |      665.00 |         2 |     99202 |      60327 |   798   ~
+    5 |      614.00 |         2 |     99181 |      60291 |   819   ~
+    6 |      704.00 |         1 |     99225 |      60285 |   775   ~
+    7 |      643.00 |         1 |     99321 |      58939 |   679   ~
+    8 |      644.00 |         1 |     99325 |      59779 |   675   ~
+    9 |      661.00 |         1 |     99301 |      59786 |   699   ~
+   10 |      694.00 |         1 |     99303 |      59273 |   697   ~
+   11 |      741.00 |         4 |     99249 |      59545 |   751   ~
+   12 |      614.00 |         4 |     99246 |      59580 |   754   ~
+   13 |      641.00 |         4 |     99241 |      60193 |   759   ~
+   14 |      643.00 |         4 |     99348 |      58458 |   652   ~
+   15 |      705.00 |         4 |     99295 |      59171 |   705   ~
+   16 |      723.00 |         3 |     99233 |      60211 |   767   ~
+   17 |      640.00 |         3 |     99312 |      59266 |   688   ~
+   18 |      673.00 |         3 |     99223 |      59959 |   777   ~
+   19 |      717.00 |         3 |     99214 |      59811 |   786   ~
+   20 |      634.00 |         3 |     99241 |      59328 |   759   ~
+
+Runtime Statistics:
+  Mean:   674.90 ms
+  Std:    40.83 ms
+  CV:     0.0605
+  Min:    614.00 ms
+  Max:    741.00 ms
+
+EFFICIENCY ASSESSMENT
+----------------------------------------
+Network efficiency:   62.40% (successes vs total attempts)
+Throughput:           49.54 frames/time
+Collision rate:       59794.10 collisions/time
+Frame loss rate:      0.76%
+Fairness index:       0.9999 (1.0 = perfect)
+
+CONSISTENCY ASSESSMENT
+----------------------------------------
+Runtime consistency:  High (CV: 0.0605)
+Throughput consistency: CV: 0.0033
+Statistical tests:    4/4 passed (100%)
+
+ FAIRNESS ASSESSMENT
+----------------------------------------
+All nodes performing within acceptable range
+
+RECOMMENDATIONS
+----------------------------------------
+• High collision rate - network may be overloaded
+
+ANALYSIS COMPLETE
+============================================================
+Total execution time: 5.18 seconds
+Batches completed: 20
+Multi-threading efficiency: ~4.0x speedup

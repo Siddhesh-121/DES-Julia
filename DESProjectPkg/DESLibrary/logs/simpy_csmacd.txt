@@ -1,0 +1,79 @@
+CSMA/CD Simulation using SimPy
+==================================================
+Nodes: 10, lambda: 5.0, Target: 100000 frames
+TX time: 0.01, Prop delay: 0.005, Slot time: 0.005
+Initialized 10 nodes with frame generation
+
+Starting simulation...
+ Node 8 drops frame after 20 retries (queue: 8)
+ Node 6 drops frame after 20 retries (queue: 9)
+ Node 8 drops frame after 20 retries (queue: 9)
+ Node 2 drops frame after 30 retries (queue: 14)
+ Node 8 drops frame after 30 retries (queue: 14)
+ Node 1 drops frame after 30 retries (queue: 14)
+ Node 8 drops frame after 30 retries (queue: 17)
+ Node 6 drops frame after 30 retries (queue: 20)
+ Node 10 drops frame after 30 retries (queue: 15)
+ Node 7 drops frame after 30 retries (queue: 20)
+All nodes idle with empty queues - simulation complete
+
+SIMULATION RESULTS
+==================================================
+Wall-clock time: 3835.37 ms
+Simulation time: 2058.0 time units
+Successful transmissions: 99990
+Total collisions: 88750
+Total generated frames: 100000
+Total dropped frames: 10
+Frames still queued: 0
+Frame loss rate: 0.01%
+
+PERFORMANCE METRICS
+==================================================
+Throughput: 48.586 frames/time unit
+Collision rate: 43.1244 collisions/time unit
+Drop rate: 0.0049 drops/time unit
+Average delay: 0.554382 time units
+Fairness index: 0.9999 (1.0 = perfect fairness)
+
+QUEUE DISTRIBUTION
+==================================================
+
+PER-NODE MAXIMUM QUEUE LENGTHS
+----------------------------------------
+Node 1: 18 frames
+Node 2: 20 frames
+Node 3: 21 frames
+Node 4: 20 frames
+Node 5: 22 frames
+Node 6: 20 frames
+Node 7: 20 frames
+Node 8: 20 frames
+Node 9: 20 frames
+Node 10: 21 frames
+
+PER-NODE STATISTICS
+================================================================================
+Node | Generated | Successes | Drops | Max Queue | Success Rate
+--------------------------------------------------------------------------------
+   1 |      9966 |      9965 |     1 |        18 |       99.99%
+   2 |      9862 |      9861 |     1 |        20 |       99.99%
+   3 |     10011 |     10011 |     0 |        21 |       100.0%
+   4 |     10150 |     10150 |     0 |        20 |       100.0%
+   5 |      9896 |      9896 |     0 |        22 |       100.0%
+   6 |      9994 |      9992 |     2 |        20 |       99.98%
+   7 |     10056 |     10055 |     1 |        20 |       99.99%
+   8 |     10152 |     10148 |     4 |        20 |      99.961%
+   9 |      9930 |      9930 |     0 |        20 |       100.0%
+  10 |      9983 |      9982 |     1 |        21 |       99.99%
+
+FRAME ACCOUNTING SUMMARY
+----------------------------------------
+Total frames generated: 100000
+Total frames succeeded: 99990
+Total frames dropped:   10
+Total frames queued:    0
+Frames processed:       100000
+Overall success rate:   99.99%
+
+SimPy CSMA/CD simulation completed!
