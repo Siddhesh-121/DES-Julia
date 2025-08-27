@@ -780,13 +780,13 @@ end
 
 
 function standard_test()
-    println("Running Standard CSMA/CD Test (10 batches)...")
+    println("Running Standard CSMA/CD Test (20 batches)...")
     return run_csmacd_analysis(num_batches=20, max_frames=100000)
 end
 
 
 function extensive_test()
-    println("Running Extensive CSMA/CD Test (25 batches)...")
+    println("Running Extensive CSMA/CD Test (30 batches)...")
     return run_csmacd_analysis(num_batches=30, max_frames=100000)
 end
 
