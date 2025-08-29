@@ -1,6 +1,52 @@
-    # println("\nQUEUE DISTRIBUTION")
-    # println("=" ^ 50)
-    # @printf("Max queue length: %d\n", max_queue)
-    # @printf("Min queue length: %d\n", min_queue)
-    # @printf("Average queue length: %.2f\n", avg_queue)
-    # @printf("Queue imbalance: %d\n", max_queue - min_queue)
+CSMA/CD Simulation using SimJulia
+==================================================
+Nodes: 10, λ: 5.0, Target: 100000 frames
+TX time: 0.01, Prop delay: 0.005, Slot time: 0.005
+Adaptive retry limits: 20, Fairness threshold: 5
+ All nodes idle with empty queues - simulation complete
+WARNING: SimJulia returned Inf time, using last tracked time: 2018.0
+
+  SIMJULIA SIMULATION RESULTS
+==================================================
+Wall-clock time: 7353.00 ms
+Simulation time: 2018.00 time units
+Successful transmissions: 99979
+Total collisions: 88001
+Total generated frames: 100000
+Total dropped frames: 21
+Frames still queued: 0
+Frame loss rate: 0.021%
+
+PERFORMANCE METRICS
+==================================================
+Throughput: 49.5436 frames/time unit
+Collision rate: 43.6080 collisions/time unit
+Drop rate: 0.0104 drops/time unit
+Average delay: 0.571538 time units
+Fairness index: 0.9999 (1.0 = perfect fairness)
+
+DELAY ANALYSIS (Bias Investigation)
+==================================================
+Successful frame avg delay: 0.571538 time units
+Dropped frame avg delay: 3.101550 time units
+Max dropped frame delay: 3.886975 time units
+Dropped frames: 21
+Delay bias factor: 5.43x
+This explains why avg delay seems low - high-delay frames are dropped!
+
+PER-NODE STATISTICS
+==================================================
+Node | Successes | Drops | Queued | Success Rate
+--------------------------------------------------
+   1 |      9941 |     3 |      0 |      99.970%
+   2 |      9979 |     4 |      0 |      99.960%
+   3 |      9908 |     0 |      0 |     100.000%
+   4 |     10072 |     3 |      0 |      99.970%
+   5 |     10053 |     3 |      0 |      99.970%
+   6 |     10133 |     1 |      0 |      99.990%
+   7 |      9851 |     4 |      0 |      99.959%
+   8 |     10133 |     2 |      0 |      99.980%
+   9 |      9983 |     0 |      0 |     100.000%
+  10 |      9926 |     1 |      0 |      99.990%
+
+SimJulia CSMA/CD simulation completed!

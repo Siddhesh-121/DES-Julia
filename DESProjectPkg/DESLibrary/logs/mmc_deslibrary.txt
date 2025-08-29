@@ -1,0 +1,97 @@
+M/M/C Queue Simulation using DESLibrary
+==================================================
+Configuration:
+  Arrival rate (λ): 20.0 entities/time
+  Service rate (μ): 2.0 entities/time per server
+  Number of servers (c): 15
+  Total entities: 200000
+  Warmup period: 10.0%
+  Traffic intensity (ρ): 10.0
+  Traffic intensity per server (ρ/c): 0.667
+  System status: Stable
+
+Starting simulation...
+
+PERFORMANCE RESULTS
+==================================================
+  Wall-clock time: 775.0 ms
+  Simulation time: 8993.88 time units
+  Total entities processed: 200000
+  Entities for statistics: 180000 (after warmup)
+  Warmup entities: 20000
+  Total throughput: 258065.0 entities/sec
+  Statistics throughput: 232258.0 entities/sec
+  Event processing rate: 516129.0 events/sec
+
+SIMULATION STATISTICS
+==================================================
+  Average waiting time: 0.0098 time units
+  Average service time: 0.5006 time units
+  Average time in system: 0.5104 time units
+  Average queue length: 0.1969 entities
+  Maximum queue length: 27 entities
+  Server utilization: 0.6679 (66.79%)
+
+INDIVIDUAL SERVER UTILIZATIONS
+==================================================
+  Server 1: 0.6689 (66.89%)
+  Server 2: 0.671 (67.1%)
+  Server 3: 0.6623 (66.23%)
+  Server 4: 0.6695 (66.95%)
+  Server 5: 0.6655 (66.55%)
+  Server 6: 0.6667 (66.67%)
+  Server 7: 0.6727 (67.27%)
+  Server 8: 0.6694 (66.94%)
+  Server 9: 0.6689 (66.89%)
+  Server 10: 0.6718 (67.18%)
+  Server 11: 0.6684 (66.84%)
+  Server 12: 0.6676 (66.76%)
+  Server 13: 0.6691 (66.91%)
+  Server 14: 0.6604 (66.04%)
+  Server 15: 0.667 (66.7%)
+  Server balance (CV): 0.004938 (lower is better)
+  Balance status: Excellent
+
+THEORETICAL CALCULATIONS
+==================================================
+  Theoretical waiting time: 0.0102 time units
+  Theoretical service time: 0.5 time units
+  Theoretical time in system: 0.5102 time units
+  Theoretical queue length: 0.2041 entities
+  Theoretical utilization: 0.6667 (66.67%)
+  Erlang-C (P(wait)): 0.102042
+
+ACCURACY VALIDATION
+==================================================
+  Waiting time error: 0.000368 (3.6%)
+  Service time error: 0.00061 (0.12%)
+  System time error: 0.000243 (0.05%)
+  Queue length error: 0.00723 (3.54%)
+  Utilization error: 0.001265 (0.19%)
+
+  Maximum relative error: 3.6%
+  Accuracy status: Good (< 5% error)
+
+LITTLE'S LAW VALIDATION
+==================================================
+  L (average queue length): 0.1969
+  λ (effective arrival rate): 20.0136
+  W (average waiting time): 0.0098
+  λW (arrival rate × waiting time): 0.1969
+  |L - λW| (absolute error): 1.0e-5
+  Relative error: 0.005%
+  Little's Law: Validated (< 1% error)
+
+SYSTEM PERFORMANCE SUMMARY
+==================================================
+  Implementation: DESLibrary M/M/C
+  Configuration: λ=20.0, μ=2.0, c=15
+  Entities processed: 200000
+  Runtime: 775.0 ms
+  Throughput: 258065.0 entities/sec
+  Memory efficiency: Circular buffer active
+  Server balance: 0.004938 CV
+  Theoretical accuracy: 3.6% max error
+  Little's Law: 0.005% error
+
+DESLibrary M/M/C simulation completed successfully!

@@ -1,0 +1,5 @@
+Normal vs Sysimage runs
+PS D:\siddh\Documents\DES Julia\DESProjectPkg\DESLibrary>   $cold = (Measure-Command { julia --project examples\Batch_Simulations\run_batch_analysis.jl }).TotalSeconds 
+>>   $coldSys = (Measure-Command { julia --project -J DESLibrary_compiled.so examples\Batch_Simulations\run_batch_analysis.jl }).TotalSeconds 
+>>   "Cold no sysimage: $cold s; cold with sysimage: $coldSys s; speedup: {0:N2}x" -f ($cold/$coldSys)
+Cold no sysimage: 15.5351198 s; cold with sysimage: 10.2840199 s; speedup: 1.51x

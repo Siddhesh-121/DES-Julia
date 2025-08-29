@@ -1,0 +1,519 @@
+D:\siddh\Documents\DES Julia\DESProjectPkg\DESLibrary>julia -t 4 --sysimage DESLibrary_co
+mpiled.so examples\Batch_Simulations\run_csmacd_analysis.jl
+CSMA/CD Batch Analysis Framework
+============================================================
+Statistical Testing for CSMA/CD Network Protocol
+
+Thread Configuration:
+   Available threads: 4
+   Multi-threading enabled
+
+
+Running standard CSMA/CD test...
+🔧 Testing with multi-threading...
+CSMA/CD BATCH ANALYSIS
+Network: 10 nodes with λ=5.0 frames/time
+Target: 100000 frames generated per batch
+Batches: 80
+Confidence level: 95.0%
+
+Starting CSMA/CD Batch Analysis...
+Starting CSMA/CD Batch Simulations
+============================================================
+Configuration:
+  Network nodes: 10
+  Frame rate: 5.0 frames/time unit
+  Max frames: 100000
+  Number of batches: 80
+  Available threads: 4
+  Using threads: 4
+
+Executing batch simulations...
+
+ Per-thread warmup (eliminating cold start JIT compilation)...
+ Initialized 10 nodes with frame generation (target: 100 frames)
+ Initialized 10 nodes with frame generation (target: 100 frames)
+ Initialized 10 nodes with frame generation (target: 100 frames)
+Thread 3 warmed up ✓ (294.0ms)
+ Initialized 10 nodes with frame generation (target: 100 frames)
+Thread 1 warmed up ✓ (589.0ms)
+Thread 2 warmed up ✓ (296.0ms)
+Thread 4 warmed up ✓ (590.0ms)
+ All 4 threads warmed up
+   Warmup statistics:
+   - Total warmup time: 605.0ms
+   - Mean warmup per thread: 442.3ms
+   - Individual warmup times: [589.0, 296.0, 294.0, 590.0]ms
+.... Initialized 10 nodes with frame generation (target: 100000 frames)
+ Initialized 10 nodes with frame generation (target: 100000 frames)
+ Initialized 10 nodes with frame generation (target: 100000 frames)
+ Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+
+Completed 80 batches in 14.2s
+CSMA/CD analysis completed successfully
+
+CSMA/CD DETAILED ANALYSIS
+============================================================
+NETWORK PERFORMANCE INSIGHTS
+----------------------------------------
+Batch count:          80
+Avg successes/batch:  99229
+Avg collisions/batch: 59947
+Avg drops/batch:      771
+Network event rate:   ~227767 events/second
+
+INDIVIDUAL BATCH RUNTIMES
+----------------------------------------
+Batch | Runtime (ms) | Thread ID | Successes | Collisions | Drops
+-----------------------------------------------------------------
+    1 |      701.00 |         1 |     99225 |      60285 |   775   ~
+    2 |      627.00 |         1 |     99321 |      58939 |   679   -
+    3 |      645.00 |         1 |     99325 |      59779 |   675   ~
+    4 |      680.00 |         1 |     99301 |      59786 |   699   ~
+    5 |      627.00 |         1 |     99303 |      59273 |   697   -
+    6 |      649.00 |         1 |     99230 |      59995 |   770   ~
+    7 |      667.00 |         1 |     99173 |      60666 |   827   ~
+    8 |      690.00 |         1 |     99286 |      59251 |   714   ~
+    9 |      676.00 |         1 |     99174 |      60501 |   826   ~
+   10 |      738.00 |         1 |     99319 |      58894 |   681   ~
+   11 |      745.00 |         1 |     99232 |      59494 |   768   ~
+   12 |      763.00 |         1 |     99240 |      59341 |   760   ~
+   13 |      780.00 |         1 |     99201 |      60027 |   799   +
+   14 |      812.00 |         1 |     99322 |      59319 |   678   +
+   15 |      635.00 |         1 |     99270 |      59464 |   730   ~
+   16 |      718.00 |         1 |     99284 |      59449 |   716   ~
+   17 |      692.00 |         1 |     99223 |      59742 |   777   ~
+   18 |      635.00 |         1 |     99281 |      59779 |   719   ~
+   19 |      688.00 |         1 |     99243 |      59741 |   757   ~
+   20 |      705.00 |         1 |     99213 |      59775 |   787   ~
+   21 |      691.00 |         3 |     99233 |      60211 |   767   ~
+   22 |      632.00 |         3 |     99312 |      59266 |   688   -
+   23 |      674.00 |         3 |     99223 |      59959 |   777   ~
+   24 |      676.00 |         3 |     99214 |      59811 |   786   ~
+   25 |      634.00 |         3 |     99241 |      59328 |   759   ~
+   26 |      656.00 |         3 |     99230 |      59829 |   770   ~
+   27 |      720.00 |         3 |     99091 |      60623 |   909   ~
+   28 |      674.00 |         3 |     99218 |      60699 |   782   ~
+   29 |      694.00 |         3 |     99245 |      59904 |   755   ~
+   30 |      815.00 |         3 |     99245 |      60148 |   755   +
+   31 |      725.00 |         3 |     99207 |      60427 |   793   ~
+   32 |      812.00 |         3 |     99210 |      60611 |   790   +
+   33 |      883.00 |         3 |     99260 |      59714 |   740   +
+   34 |      739.00 |         3 |     99276 |      59734 |   724   ~
+   35 |      679.00 |         3 |     99250 |      59743 |   750   ~
+   36 |      689.00 |         3 |     99229 |      60167 |   771   ~
+   37 |      693.00 |         3 |     99225 |      59898 |   775   ~
+   38 |      724.00 |         3 |     99119 |      61289 |   881   ~
+   39 |      666.00 |         3 |     99235 |      59692 |   765   ~
+   40 |      685.00 |         3 |     99124 |      60955 |   876   ~
+   41 |      689.00 |         4 |     99249 |      59545 |   751   ~
+   42 |      667.00 |         4 |     99246 |      59580 |   754   ~
+   43 |      665.00 |         4 |     99241 |      60193 |   759   ~
+   44 |      663.00 |         4 |     99348 |      58458 |   652   ~
+   45 |      636.00 |         4 |     99295 |      59171 |   705   ~
+   46 |      648.00 |         4 |     99415 |      57915 |   585   ~
+   47 |      702.00 |         4 |     99309 |      59630 |   691   ~
+   48 |      656.00 |         4 |     99228 |      60208 |   772   ~
+   49 |      691.00 |         4 |     99394 |      58489 |   606   ~
+   50 |      770.00 |         4 |     99297 |      59399 |   703   ~
+   51 |      747.00 |         4 |     99281 |      59265 |   719   ~
+   52 |      783.00 |         4 |     99316 |      58613 |   684   +
+   53 |      799.00 |         4 |     99296 |      59095 |   704   +
+   54 |      762.00 |         4 |     99363 |      58414 |   637   ~
+   55 |      675.00 |         4 |     99214 |      60077 |   786   ~
+   56 |      677.00 |         4 |     99240 |      60281 |   760   ~
+   57 |      698.00 |         4 |     99326 |      59505 |   674   ~
+   58 |      703.00 |         4 |     99295 |      59443 |   705   ~
+   59 |      682.00 |         4 |     99258 |      59554 |   742   ~
+   60 |      708.00 |         4 |     99244 |      59976 |   756   ~
+   61 |      680.00 |         2 |     99237 |      59897 |   763   ~
+   62 |      649.00 |         2 |     99163 |      60621 |   837   ~
+   63 |      663.00 |         2 |     99102 |      61162 |   898   ~
+   64 |      676.00 |         2 |     99202 |      60327 |   798   ~
+   65 |      629.00 |         2 |     99181 |      60291 |   819   -
+   66 |      660.00 |         2 |     99137 |      60542 |   863   ~
+   67 |      695.00 |         2 |     99117 |      61045 |   883   ~
+   68 |      690.00 |         2 |     99073 |      61787 |   927   ~
+   69 |      672.00 |         2 |     99305 |      59115 |   695   ~
+   70 |      795.00 |         2 |     99010 |      62138 |   990   +
+   71 |      740.00 |         2 |     99181 |      60572 |   819   ~
+   72 |      800.00 |         2 |     99071 |      60816 |   929   +
+   73 |      820.00 |         2 |     99176 |      60342 |   824   +
+   74 |      782.00 |         2 |     99165 |      60537 |   835   +
+   75 |      681.00 |         2 |     99120 |      60848 |   880   ~
+   76 |      698.00 |         2 |     99077 |      60980 |   923   ~
+   77 |      682.00 |         2 |     99202 |      60220 |   798   ~
+   78 |      714.00 |         2 |     99114 |      60907 |   886   ~
+   79 |      696.00 |         2 |     99069 |      61158 |   931   ~
+   80 |      702.00 |         2 |     99181 |      60113 |   819   ~
+
+Runtime Statistics:
+  Mean:   702.24 ms
+  Std:    53.69 ms
+  CV:     0.0765
+  Min:    627.00 ms
+  Max:    883.00 ms
+
+EFFICIENCY ASSESSMENT
+----------------------------------------
+Network efficiency:   62.34% (successes vs total attempts)
+Throughput:           49.53 frames/time
+Collision rate:       59946.71 collisions/time
+Frame loss rate:      0.78%
+Fairness index:       0.9999 (1.0 = perfect)
+
+CONSISTENCY ASSESSMENT
+----------------------------------------
+Runtime consistency:  High (CV: 0.0765)
+Throughput consistency: CV: 0.0034
+Statistical tests:    4/4 passed (100%)
+
+ FAIRNESS ASSESSMENT
+----------------------------------------
+All nodes performing within acceptable range
+
+RECOMMENDATIONS
+----------------------------------------
+• High collision rate - network may be overloaded
+
+ANALYSIS COMPLETE
+============================================================
+Total execution time: 15.88 seconds
+Batches completed: 80
+Multi-threading efficiency: ~4.0x speedup
+
+D:\siddh\Documents\DES Julia\DESProjectPkg\DESLibrary>julia -t 4 examples/Batch_Simulatio
+ns/run_csmacd_analysis.jl
+CSMA/CD Batch Analysis Framework
+============================================================
+Statistical Testing for CSMA/CD Network Protocol
+
+Thread Configuration:
+   Available threads: 4
+   Multi-threading enabled
+
+
+Running standard CSMA/CD test...
+🔧 Testing with multi-threading...
+CSMA/CD BATCH ANALYSIS
+Network: 10 nodes with λ=5.0 frames/time
+Target: 100000 frames generated per batch
+Batches: 80
+Confidence level: 95.0%
+
+Starting CSMA/CD Batch Analysis...
+Starting CSMA/CD Batch Simulations
+============================================================
+Configuration:
+  Network nodes: 10
+  Frame rate: 5.0 frames/time unit
+  Max frames: 100000
+  Number of batches: 80
+  Available threads: 4
+  Using threads: 4
+
+Executing batch simulations...
+
+ Per-thread warmup (eliminating cold start JIT compilation)...
+ Initialized 10 nodes with frame generation (target: 100 frames)
+ Initialized 10 nodes with frame generation (target: 100 frames)
+ Initialized 10 nodes with frame generation (target: 100 frames)
+ Initialized 10 nodes with frame generation (target: 100 frames)
+Thread 3 warmed up ✓ (307.0ms)
+Thread 2 warmed up ✓ (649.0ms)
+Thread 1 warmed up ✓ (289.0ms)
+Thread 4 warmed up ✓ (648.0ms)
+ All 4 threads warmed up
+   Warmup statistics:
+   - Total warmup time: 669.0ms
+   - Mean warmup per thread: 473.2ms
+   - Individual warmup times: [649.0, 307.0, 289.0, 648.0]ms
+.... Initialized 10 nodes with frame generation (target: 100000 frames)
+ Initialized 10 nodes with frame generation (target: 100000 frames)
+ Initialized 10 nodes with frame generation (target: 100000 frames)
+ Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+. Initialized 10 nodes with frame generation (target: 100000 frames)
+
+Completed 80 batches in 15.11s
+CSMA/CD analysis completed successfully
+
+CSMA/CD DETAILED ANALYSIS
+============================================================
+NETWORK PERFORMANCE INSIGHTS
+----------------------------------------
+Batch count:          80
+Avg successes/batch:  99229
+Avg collisions/batch: 59947
+Avg drops/batch:      771
+Network event rate:   ~215134 events/second
+
+INDIVIDUAL BATCH RUNTIMES
+----------------------------------------
+Batch | Runtime (ms) | Thread ID | Successes | Collisions | Drops
+-----------------------------------------------------------------
+    1 |      673.00 |         1 |     99225 |      60285 |   775   ~
+    2 |      680.00 |         1 |     99321 |      58939 |   679   ~
+    3 |      674.00 |         1 |     99325 |      59779 |   675   ~
+    4 |      817.00 |         1 |     99301 |      59786 |   699   ~
+    5 |      675.00 |         1 |     99303 |      59273 |   697   ~
+    6 |      644.00 |         1 |     99230 |      59995 |   770   -
+    7 |      698.00 |         1 |     99173 |      60666 |   827   ~
+    8 |      700.00 |         1 |     99286 |      59251 |   714   ~
+    9 |      809.00 |         1 |     99174 |      60501 |   826   ~
+   10 |      669.00 |         1 |     99319 |      58894 |   681   -
+   11 |      853.00 |         1 |     99232 |      59494 |   768   +
+   12 |      763.00 |         1 |     99240 |      59341 |   760   ~
+   13 |      817.00 |         1 |     99201 |      60027 |   799   ~
+   14 |      819.00 |         1 |     99322 |      59319 |   678   +
+   15 |      731.00 |         1 |     99270 |      59464 |   730   ~
+   16 |      680.00 |         1 |     99284 |      59449 |   716   ~
+   17 |      700.00 |         1 |     99223 |      59742 |   777   ~
+   18 |      715.00 |         1 |     99281 |      59779 |   719   ~
+   19 |      785.00 |         1 |     99243 |      59741 |   757   ~
+   20 |      770.00 |         1 |     99213 |      59775 |   787   ~
+   21 |      692.00 |         3 |     99233 |      60211 |   767   ~
+   22 |      676.00 |         3 |     99312 |      59266 |   688   ~
+   23 |      735.00 |         3 |     99223 |      59959 |   777   ~
+   24 |      829.00 |         3 |     99214 |      59811 |   786   +
+   25 |      686.00 |         3 |     99241 |      59328 |   759   ~
+   26 |      683.00 |         3 |     99230 |      59829 |   770   ~
+   27 |      662.00 |         3 |     99091 |      60623 |   909   -
+   28 |      789.00 |         3 |     99218 |      60699 |   782   ~
+   29 |      761.00 |         3 |     99245 |      59904 |   755   ~
+   30 |      694.00 |         3 |     99245 |      60148 |   755   ~
+   31 |      989.00 |         3 |     99207 |      60427 |   793   +
+   32 |      711.00 |         3 |     99210 |      60611 |   790   ~
+   33 |      829.00 |         3 |     99260 |      59714 |   740   +
+   34 |      781.00 |         3 |     99276 |      59734 |   724   ~
+   35 |      803.00 |         3 |     99250 |      59743 |   750   ~
+   36 |      726.00 |         3 |     99229 |      60167 |   771   ~
+   37 |      727.00 |         3 |     99225 |      59898 |   775   ~
+   38 |      678.00 |         3 |     99119 |      61289 |   881   ~
+   39 |      844.00 |         3 |     99235 |      59692 |   765   +
+   40 |      729.00 |         3 |     99124 |      60955 |   876   ~
+   41 |      672.00 |         2 |     99237 |      59897 |   763   ~
+   42 |      703.00 |         2 |     99163 |      60621 |   837   ~
+   43 |      736.00 |         2 |     99102 |      61162 |   898   ~
+   44 |      845.00 |         2 |     99202 |      60327 |   798   +
+   45 |      731.00 |         2 |     99181 |      60291 |   819   ~
+   46 |      695.00 |         2 |     99137 |      60542 |   863   ~
+   47 |      650.00 |         2 |     99117 |      61045 |   883   -
+   48 |      801.00 |         2 |     99073 |      61787 |   927   ~
+   49 |      706.00 |         2 |     99305 |      59115 |   695   ~
+   50 |      714.00 |         2 |     99010 |      62138 |   990   ~
+   51 |      984.00 |         2 |     99181 |      60572 |   819   +
+   52 |      787.00 |         2 |     99071 |      60816 |   929   ~
+   53 |      801.00 |         2 |     99176 |      60342 |   824   ~
+   54 |      796.00 |         2 |     99165 |      60537 |   835   ~
+   55 |      819.00 |         2 |     99120 |      60848 |   880   +
+   56 |      688.00 |         2 |     99077 |      60980 |   923   ~
+   57 |      725.00 |         2 |     99202 |      60220 |   798   ~
+   58 |      646.00 |         2 |     99114 |      60907 |   886   -
+   59 |      862.00 |         2 |     99069 |      61158 |   931   +
+   60 |      706.00 |         2 |     99181 |      60113 |   819   ~
+   61 |      671.00 |         4 |     99249 |      59545 |   751   ~
+   62 |      734.00 |         4 |     99246 |      59580 |   754   ~
+   63 |      730.00 |         4 |     99241 |      60193 |   759   ~
+   64 |      785.00 |         4 |     99348 |      58458 |   652   ~
+   65 |      672.00 |         4 |     99295 |      59171 |   705   ~
+   66 |      620.00 |         4 |     99415 |      57915 |   585   -
+   67 |      681.00 |         4 |     99309 |      59630 |   691   ~
+   68 |      733.00 |         4 |     99228 |      60208 |   772   ~
+   69 |      761.00 |         4 |     99394 |      58489 |   606   ~
+   70 |      686.00 |         4 |     99297 |      59399 |   703   ~
+   71 |      848.00 |         4 |     99281 |      59265 |   719   +
+   72 |      718.00 |         4 |     99316 |      58613 |   684   ~
+   73 |      780.00 |         4 |     99296 |      59095 |   704   ~
+   74 |      812.00 |         4 |     99363 |      58414 |   637   ~
+   75 |      777.00 |         4 |     99214 |      60077 |   786   ~
+   76 |      742.00 |         4 |     99240 |      60281 |   760   ~
+   77 |      699.00 |         4 |     99326 |      59505 |   674   ~
+   78 |      696.00 |         4 |     99295 |      59443 |   705   ~
+   79 |      799.00 |         4 |     99258 |      59554 |   742   ~
+   80 |      771.00 |         4 |     99244 |      59976 |   756   ~
+
+Runtime Statistics:
+  Mean:   743.47 ms
+  Std:    70.98 ms
+  CV:     0.0955
+  Min:    620.00 ms
+  Max:    989.00 ms
+
+EFFICIENCY ASSESSMENT
+----------------------------------------
+Network efficiency:   62.34% (successes vs total attempts)
+Throughput:           49.53 frames/time
+Collision rate:       59946.71 collisions/time
+Frame loss rate:      0.78%
+Fairness index:       0.9999 (1.0 = perfect)
+
+CONSISTENCY ASSESSMENT
+----------------------------------------
+Runtime consistency:  High (CV: 0.0955)
+Throughput consistency: CV: 0.0034
+Statistical tests:    4/4 passed (100%)
+
+ FAIRNESS ASSESSMENT
+----------------------------------------
+All nodes performing within acceptable range
+
+RECOMMENDATIONS
+----------------------------------------
+• High collision rate - network may be overloaded
+
+ANALYSIS COMPLETE
+============================================================
+Total execution time: 16.88 seconds
+Batches completed: 80
+Multi-threading efficiency: ~4.0x speedup
